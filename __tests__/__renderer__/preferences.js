@@ -247,7 +247,6 @@ describe('Test Preferences Window Reset', () =>
         {
             checkItemText('reset-button', 'Reset')
             clickItem('reset-button');
-            checkItemText('reset-button', 'Resetted!')
         });
     });
 });

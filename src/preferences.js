@@ -7,32 +7,6 @@ import { translatePage } from '../renderer/i18n-translator.js';
 let usersStyles;
 let preferences;
 
-const defaultPreferences = {
-    'count-today': false,
-    'close-to-tray': true,
-    'minimize-to-tray': true,
-    'hide-non-working-days': false,
-    'hours-per-day': '08:00',
-    'enable-prefill-break-time': false,
-    'break-time-interval': '00:30',
-    'notification': true,
-    'repetition': true,
-    'notifications-interval': '5',
-    'start-at-login': false,
-    'theme': 'system-default',
-    'overall-balance-start-date': '2019-01-01',
-    'update-remind-me-after': '2019-01-01',
-    'working-days-monday': true,
-    'working-days-tuesday': true,
-    'working-days-wednesday': true,
-    'working-days-thursday': true,
-    'working-days-friday': true,
-    'working-days-saturday': false,
-    'working-days-sunday': false,
-    'view': 'month',
-    'language': 'en'
-};
-
 function populateLanguages()
 {
     const languageOpts = $('#language');
@@ -92,14 +66,6 @@ function refreshContent()
 function changeValue(type, newVal)
 {
     preferences[type] = newVal;
-    window.mainApi.notifyNewPreferences(preferences);
-}
-
-function resetPreferences()
-{
-    preferences = defaultPreferences;
-    applyTheme(defaultPreferences['theme']);
-    $('.reset-button').text('Resetted!');
     window.mainApi.notifyNewPreferences(preferences);
 }
 
@@ -184,7 +150,11 @@ function renderPreferencesWindow()
 
     $('#reset-button').on('click', function()
     {
-        resetPreferences();
+        if (window.mainApi.shouldResetPreferences())
+        {
+            window.mainApi.resetPreferences();
+            refreshContent();
+        }
     });
 
     const prefillBreak = $('#enable-prefill-break-time');
