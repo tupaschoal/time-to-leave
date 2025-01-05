@@ -18,20 +18,12 @@ jobs:
     - name: Write missing translation to file
       run: |
         python scripts/check_languages.py -output missing.md -report_summary -report_key_mismatch -report_missing_translations
-    - name: Get comment body
-      id: get-comment-body
-      run: |
-        body=$(cat missing.md)
-        body="${body//'%'/'%25'}"
-        body="${body//$'\n'/'%0A'}"
-        body="${body//$'\r'/'%0D'}"
-        echo "body=$body" >> $GITHUB_OUTPUT
     - name: Update comment
-      uses: peter-evans/create-or-update-comment@v1
+      uses: peter-evans/create-or-update-comment@v4
       with:
         # Update the comment in issue 475
         # https://github.com/TTLApp/time-to-leave/issues/475#issuecomment-808787273
         comment-id: 808787273
         edit-mode: replace
-        body: ${{ steps.get-comment-body.outputs.body }}
+        body-path: missing.md
         reactions: hooray

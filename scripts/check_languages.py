@@ -240,7 +240,7 @@ def get_count_total_string_with_link(locale : str, missing_translations : dict, 
 
 def get_progress_bar(total_strings_for_translation : int, missing_strings : dict) -> str:
     percentage = percentage_translated(total_strings_for_translation, missing_strings)
-    return f'![Progress](https://progress-bar.dev/{floor(percentage)}/?width=200)'
+    return f'![Progress](https://progress-bar.xyz/{floor(percentage)}/?width=200)'
 
 def get_new_issue_url(locale : str, missing_translations : dict) -> str:
     language = get_locale_name(locale)
