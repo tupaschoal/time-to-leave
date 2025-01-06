@@ -5,6 +5,7 @@
 - Change [#935]: Remove support for migrating from fixed into flexible database (introduced in 2.0.0)
 - Enhancement [#1009]: Adding an animation to the workday waiver holidays table when the contents switch
 - Enhancement [#646]: Title bar color now follows Windows mode (dark or light)
+- Enhancement [#891]: Add button to reset to default preferences on preferences dialog
 - Enhancement [#914]: Enable more formats to input time in preferences
 - Enhancement [#946]: Included formal json scheme validator
 - Enhancement [#948]: Allow vertical scroll when horizontal scroll reaches edges on month view
