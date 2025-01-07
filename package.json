@@ -58,8 +58,7 @@
     "prettier": "3.4.2",
     "sinon": "17.0.1",
     "stylelint": "16.2.0",
-    "stylelint-config-standard": "36.0.0",
-    "tap-spec": "5.0.0"
+    "stylelint-config-standard": "36.0.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "6.7.2",
