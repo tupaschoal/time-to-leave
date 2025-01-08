@@ -47,7 +47,7 @@
     "electron-mocha": "13.0.1",
     "electron-reloader": "1.2.3",
     "electron-winstaller": "5.4.0",
-    "eslint": "7.32.0",
+    "eslint": "8.56.0",
     "husky": "9.1.7",
     "jsdom": "25.0.1",
     "mocha": "11.0.1",
