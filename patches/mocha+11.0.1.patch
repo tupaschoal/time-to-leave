@@ -1,5 +1,5 @@
 diff --git a/node_modules/mocha/lib/nodejs/parallel-buffered-runner.js b/node_modules/mocha/lib/nodejs/parallel-buffered-runner.js
-index 6052efc..66ad1f9 100644
+index dfe8cfa..0cf8700 100644
 --- a/node_modules/mocha/lib/nodejs/parallel-buffered-runner.js
 +++ b/node_modules/mocha/lib/nodejs/parallel-buffered-runner.js
 @@ -10,11 +10,15 @@ const Runner = require('../runner');
