@@ -64,7 +64,7 @@ function _exportDatabaseToFile(filename)
     {
         fs.writeFileSync(filename, JSON.stringify(information, null,'\t'), 'utf-8');
     }
-    catch (err)
+    catch
     {
         return false;
     }
@@ -149,7 +149,7 @@ function _importDatabaseFromFile(filename)
             return {'result': false, 'total': information.length, 'failed': failedEntries};
         }
     }
-    catch (err)
+    catch
     {
         return {'result': false, 'total': 0, 'failed': 0};
     }

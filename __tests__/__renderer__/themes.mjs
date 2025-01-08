@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 'use strict';
 
 import '../../__mocks__/jquery.mjs';

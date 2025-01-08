@@ -113,7 +113,7 @@ function isValidDate(year, month, day)
  */
 Validator.prototype.customFormats.dateFormat = function(dateStr)
 {
-    if (!typeof(dateStr) === 'String' || !dateStr.includes('-'))
+    if (!(typeof(dateStr) === 'string') || !dateStr.includes('-'))
     {
         return false;
     }

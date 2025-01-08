@@ -1,7 +1,0 @@
-assets/
-coverage/
-node_modules/
-**/*.svg
-**/*.html
-**/*.css
-release-builds
