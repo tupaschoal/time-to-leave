@@ -1,4 +1,3 @@
-/*eslint-disable no-global-assign*/
 'use strict';
 
 import { contextBridge } from 'electron';

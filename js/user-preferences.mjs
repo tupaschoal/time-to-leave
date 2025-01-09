@@ -134,7 +134,7 @@ function readPreferences(filePath = getPreferencesFilePath())
     {
         preferences = JSON.parse(getFs().readFileSync(filePath));
     }
-    catch (err)
+    catch
     {
         preferences = {};
     }

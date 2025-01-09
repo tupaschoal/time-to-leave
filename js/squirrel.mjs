@@ -25,9 +25,8 @@ function handleSquirrelEvent(application)
                 detached: true
             });
         }
-        catch (error)
+        catch
         {
-            // eslint-disable-next-line no-empty
             // We don't need to do anything in this block.
         }
 

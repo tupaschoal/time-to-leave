@@ -1,5 +1,3 @@
-/*eslint-disable no-useless-escape*/
-/*eslint-disable no-global-assign*/
 'use strict';
 
 import { app, ipcMain } from 'electron';
@@ -191,9 +189,8 @@ if (env === 'development')
     {
         require('electron-reloader')(module);
     }
-    catch (_)
+    catch
     {
-        // eslint-disable-next-line no-empty
         // We don't need to do anything in this block.
     }
 }
