@@ -17,7 +17,7 @@ import { i18nMock } from '../../src/configs/i18next.config.mjs';
 i18nMock.mock('getCurrentTranslation', stub().callsFake((code) => code));
 
 import { windowsMock } from '../../js/windows.mjs';
-import { notificationMock } from '../../js/notification.mjs';
+import Notification from '../../js/notification.mjs';
 import { updateManagerMock } from '../../js/update-manager.mjs';
 import ImportExport from '../../js/import-export.mjs';
 
@@ -118,11 +118,11 @@ describe('menus.js', () =>
                     }
                 }
             };
-            notificationMock.mock('createNotification', stub().callsFake(() => ({
+            mocks._createNotification = stub(Notification, 'createNotification').callsFake(() => ({
                 show: stub()
-            })));
+            }));
             getContextMenuTemplate(mainWindow)[0].click();
-            assert.strictEqual(notificationMock.getMock('createNotification').calledOnce, true);
+            assert.strictEqual(Notification.createNotification.calledOnce, true);
         });
 
         it('Should create notification on click', (done) =>
@@ -179,11 +179,11 @@ describe('menus.js', () =>
                     }
                 }
             };
-            notificationMock.mock('createNotification', stub().callsFake(() => ({
+            mocks._createNotification = stub(Notification, 'createNotification').callsFake(() => ({
                 show: done
-            })));
+            }));
             getDockMenuTemplate(mainWindow)[0].click();
-            assert.strictEqual(notificationMock.getMock('createNotification').calledOnce, true);
+            assert.strictEqual(Notification.createNotification.calledOnce, true);
         });
     });
 
@@ -571,7 +571,6 @@ describe('menus.js', () =>
         {
             mock.restore();
         }
-        notificationMock.restoreAll();
         updateManagerMock.restoreAll();
         windowsMock.restoreAll();
     });

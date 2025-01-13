@@ -4,7 +4,7 @@ import assert from 'assert';
 import { app } from 'electron';
 import { stub } from 'sinon';
 
-import { createNotification, createLeaveNotification, updateDismiss, getDismiss } from '../../js/notification.mjs';
+import Notification from '../../js/notification.mjs';
 import { getUserPreferences, savePreferences, resetPreferences } from '../../js/user-preferences.mjs';
 import { getDateStr } from '../../js/date-aux.mjs';
 
@@ -19,7 +19,7 @@ describe('Notifications', function()
     {
         it('displays a notification in test', (done) =>
         {
-            const notification = createNotification('test');
+            const notification = Notification.createNotification('test');
             // On Win32 the notification uses a different specification, with toastXml
             if (process.platform === 'win32')
             {
@@ -59,7 +59,7 @@ describe('Notifications', function()
         it('displays a notification in production', (done) =>
         {
             process.env.NODE_ENV = 'production';
-            const notification = createNotification('production');
+            const notification = Notification.createNotification('production');
             // On Win32 the notification uses a different specification, with toastXml
             if (process.platform === 'win32')
             {
@@ -106,13 +106,13 @@ describe('Notifications', function()
             const preferences = getUserPreferences();
             preferences['notification'] = false;
             savePreferences(preferences);
-            const notify = createLeaveNotification(true);
+            const notify = Notification.createLeaveNotification(true);
             assert.strictEqual(notify, false);
         });
 
         it('Should fail when leaveByElement is not found', () =>
         {
-            const notify = createLeaveNotification(undefined);
+            const notify = Notification.createLeaveNotification(undefined);
             assert.strictEqual(notify, false);
         });
 
@@ -120,14 +120,14 @@ describe('Notifications', function()
         {
             const now = new Date();
             const dateToday = getDateStr(now);
-            updateDismiss(dateToday);
-            const notify = createLeaveNotification(true);
+            Notification.updateDismiss(dateToday);
+            const notify = Notification.createLeaveNotification(true);
             assert.strictEqual(notify, false);
         });
 
         it('Should fail when time is not valid', () =>
         {
-            const notify = createLeaveNotification('33:90');
+            const notify = Notification.createLeaveNotification('33:90');
             assert.strictEqual(notify, false);
         });
 
@@ -135,7 +135,7 @@ describe('Notifications', function()
         {
             const now = new Date();
             now.setMinutes(now.getMinutes() + 1);
-            const notify = createLeaveNotification(buildTimeString(now));
+            const notify = Notification.createLeaveNotification(buildTimeString(now));
             assert.strictEqual(notify, false);
         });
 
@@ -143,7 +143,7 @@ describe('Notifications', function()
         {
             const now = new Date();
             now.setMinutes(now.getMinutes() - 9);
-            const notify = createLeaveNotification(buildTimeString(now));
+            const notify = Notification.createLeaveNotification(buildTimeString(now));
             assert.strictEqual(notify, false);
         });
 
@@ -154,47 +154,47 @@ describe('Notifications', function()
             savePreferences(preferences);
             const now = new Date();
             now.setHours(now.getHours() - 1);
-            const notify = createLeaveNotification(buildTimeString(now));
+            const notify = Notification.createLeaveNotification(buildTimeString(now));
             assert.strictEqual(notify, false);
         });
 
         it('Should pass when time is correct and dismiss action is pressed', () =>
         {
             const now = new Date();
-            const notify = createLeaveNotification(buildTimeString(now));
+            const notify = Notification.createLeaveNotification(buildTimeString(now));
             assert.notStrictEqual(notify, undefined);
-            assert.strictEqual(getDismiss(), null);
+            assert.strictEqual(Notification.getDismiss(), null);
             assert.strictEqual(notify.listenerCount('action'), 1);
             assert.strictEqual(notify.listenerCount('close'), 1);
             assert.strictEqual(notify.listenerCount('click'), 1);
             notify.emit('action', 'dismiss');
-            assert.strictEqual(getDismiss(), getDateStr(now));
+            assert.strictEqual(Notification.getDismiss(), getDateStr(now));
         });
 
         it('Should pass when time is correct and other action is pressed', () =>
         {
             const now = new Date();
-            const notify = createLeaveNotification(buildTimeString(now));
+            const notify = Notification.createLeaveNotification(buildTimeString(now));
             assert.notStrictEqual(notify, undefined);
-            assert.strictEqual(getDismiss(), null);
+            assert.strictEqual(Notification.getDismiss(), null);
             assert.strictEqual(notify.listenerCount('action'), 1);
             assert.strictEqual(notify.listenerCount('close'), 1);
             assert.strictEqual(notify.listenerCount('click'), 1);
             notify.emit('action', '');
-            assert.strictEqual(getDismiss(), null);
+            assert.strictEqual(Notification.getDismiss(), null);
         });
 
         it('Should pass when time is correct and close is pressed', () =>
         {
             const now = new Date();
-            const notify = createLeaveNotification(buildTimeString(now));
+            const notify = Notification.createLeaveNotification(buildTimeString(now));
             assert.notStrictEqual(notify, undefined);
-            assert.strictEqual(getDismiss(), null);
+            assert.strictEqual(Notification.getDismiss(), null);
             assert.strictEqual(notify.listenerCount('action'), 1);
             assert.strictEqual(notify.listenerCount('close'), 1);
             assert.strictEqual(notify.listenerCount('click'), 1);
             notify.emit('close');
-            assert.strictEqual(getDismiss(), getDateStr(now));
+            assert.strictEqual(Notification.getDismiss(), getDateStr(now));
         });
 
         it('Should pass when time is correct and close is pressed', (done) =>
@@ -206,7 +206,7 @@ describe('Notifications', function()
                 done();
             });
             const now = new Date();
-            const notify = createLeaveNotification(buildTimeString(now));
+            const notify = Notification.createLeaveNotification(buildTimeString(now));
             assert.notStrictEqual(notify, undefined);
             assert.strictEqual(notify.listenerCount('action'), 1);
             assert.strictEqual(notify.listenerCount('close'), 1);
@@ -218,6 +218,6 @@ describe('Notifications', function()
     afterEach(() =>
     {
         resetPreferences();
-        updateDismiss(null);
+        Notification.updateDismiss(null);
     });
 });

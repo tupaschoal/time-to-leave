@@ -4,7 +4,7 @@ import assert from 'assert';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { match, spy, stub, useFakeTimers } from 'sinon';
 
-import { notificationMock } from '../../js/notification.mjs';
+import Notification from '../../js/notification.mjs';
 import { savePreferences, getDefaultPreferences, resetPreferences } from '../../js/user-preferences.mjs';
 
 import {
@@ -186,29 +186,29 @@ describe('main-window.mjs', () =>
             const mainWindow = getMainWindow();
             mainWindow.on('ready-to-show', () =>
             {
-                notificationMock.mock('createLeaveNotification', stub().callsFake(() =>
+                stub(Notification, 'createLeaveNotification').callsFake(() =>
                 {
                     return false;
-                }));
+                });
                 ipcMain.emit('RECEIVE_LEAVE_BY', {}, undefined);
-                assert.strictEqual(notificationMock.getMock('createLeaveNotification').calledOnce, true);
-                notificationMock.restoreMock('createLeaveNotification');
+                assert.strictEqual(Notification.createLeaveNotification.calledOnce, true);
+                Notification.createLeaveNotification.restore();
                 done();
             });
         });
 
         it('Should show notification', (done) =>
         {
-            notificationMock.mock('createLeaveNotification', stub().callsFake(() =>
+            stub(Notification, 'createLeaveNotification').callsFake(() =>
             {
                 return {
                     show: () =>
                     {
-                        notificationMock.restoreMock('createLeaveNotification');
+                        Notification.createLeaveNotification.restore();
                         done();
                     }
                 };
-            }));
+            });
             createWindow();
             /**
              * @type {BrowserWindow}

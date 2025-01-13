@@ -4,7 +4,7 @@ import { app, ipcMain } from 'electron';
 
 import { appConfig } from './js/app-config.mjs';
 import { createWindow, createMenu, getMainWindow, triggerStartupDialogs } from './js/main-window.mjs';
-import { createNotification } from './js/notification.mjs';
+import Notification from './js/notification.mjs';
 import { handleSquirrelEvent } from './js/squirrel.mjs';
 import { openWaiverManagerWindow } from './js/windows.mjs';
 import { setupCalendarStore } from './main/calendar-aux.mjs';
@@ -79,7 +79,7 @@ function checkIdleAndNotify()
     if (recommendPunchIn)
     {
         recommendPunchIn = false;
-        createNotification(getCurrentTranslation('$Notification.punch-reminder')).show();
+        Notification.createNotification(getCurrentTranslation('$Notification.punch-reminder')).show();
     }
 }
 

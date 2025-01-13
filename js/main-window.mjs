@@ -12,7 +12,7 @@ import {
     getMainMenuTemplate,
     getViewMenuTemplate
 } from './menus.mjs';
-import { createLeaveNotification } from './notification.mjs';
+import Notification from './notification.mjs';
 import { checkForUpdates, shouldCheckForUpdates } from './update-manager.mjs';
 import { getDefaultWidthHeight, getUserPreferences, switchCalendarView } from './user-preferences.mjs';
 import { getCurrentTranslation } from '../src/configs/i18next.config.mjs';
@@ -116,7 +116,7 @@ function createWindow()
 
     ipcMain.on('RECEIVE_LEAVE_BY', (event, element) =>
     {
-        const notification = createLeaveNotification(element);
+        const notification = Notification.createLeaveNotification(element);
         if (notification) notification.show();
     });
 

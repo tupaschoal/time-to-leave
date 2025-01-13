@@ -7,7 +7,7 @@ import path from 'path';
 import { appConfig, getDetails, rootDir } from './app-config.mjs';
 import { getCurrentDateTimeStr } from './date-aux.mjs';
 import ImportExport from './import-export.mjs';
-import { createNotification } from './notification.mjs';
+import Notification from './notification.mjs';
 import { getSavedPreferences } from './saved-preferences.mjs';
 import { checkForUpdates } from './update-manager.mjs';
 import { savePreferences } from './user-preferences.mjs';
@@ -48,7 +48,7 @@ function getContextMenuTemplate(mainWindow)
 
                 mainWindow.webContents.send('PUNCH_DATE');
                 // Slice keeps "HH:MM" part of "HH:MM:SS GMT+HHMM (GMT+HH:MM)" time string
-                createNotification(
+                Notification.createNotification(
                     `${getCurrentTranslation(
                         '$Menu.punched-time'
                     )} ${now.toTimeString().slice(0, 5)}`
@@ -83,7 +83,7 @@ function getDockMenuTemplate(mainWindow)
 
                 mainWindow.webContents.send('PUNCH_DATE');
                 // Slice keeps "HH:MM" part of "HH:MM:SS GMT+HHMM (GMT+HH:MM)" time string
-                createNotification(
+                Notification.createNotification(
                     `${getCurrentTranslation(
                         '$Menu.punched-time'
                     )} ${now.toTimeString().slice(0, 5)}`
