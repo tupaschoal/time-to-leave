@@ -5,7 +5,7 @@ import { app, Notification as ElectronNotification } from 'electron';
 
 import { rootDir } from './app-config.mjs';
 import { getDateStr } from './date-aux.mjs';
-import { hourToMinutes, subtractTime, validateTime } from './time-math.mjs';
+import TimeMath from './time-math.mjs';
 import { getNotificationsInterval, notificationIsEnabled, repetitionIsEnabled } from './user-preferences.mjs';
 import { getCurrentTranslation } from '../src/configs/i18next.config.mjs';
 import { MockClass } from '../__mocks__/Mock.mjs';
@@ -68,7 +68,7 @@ function _createLeaveNotification(timeToLeave)
         return false;
     }
 
-    if (validateTime(timeToLeave))
+    if (TimeMath.validateTime(timeToLeave))
     {
         /**
          * How many minutes should pass before the Time-To-Leave notification should be presented again.
@@ -78,7 +78,7 @@ function _createLeaveNotification(timeToLeave)
         const curTime = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
         // Let check if it's past the time to leave, and the minutes line up with the interval to check
-        const minutesDiff = hourToMinutes(subtractTime(timeToLeave, curTime));
+        const minutesDiff = TimeMath.hourToMinutes(TimeMath.subtractTime(timeToLeave, curTime));
         const isRepeatingInterval = curTime > timeToLeave && (minutesDiff % notificationInterval === 0);
         if (curTime === timeToLeave || (isRepeatingInterval && repetitionIsEnabled()))
         {

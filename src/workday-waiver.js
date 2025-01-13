@@ -2,7 +2,7 @@
 
 import { applyTheme } from '../renderer/themes.js';
 import { getTranslationInLanguageData, translatePage } from '../renderer/i18n-translator.js';
-import { validateTime, diffDays } from '../js/time-math.mjs';
+import TimeMath from '../js/time-math.mjs';
 import { getDateStr } from '../js/date-aux.mjs';
 
 let languageData;
@@ -107,13 +107,13 @@ async function addWaiver()
         reason = $('#reason').val(),
         hours = $('#hours').val();
 
-    if (!(validateTime(hours)))
+    if (!(TimeMath.validateTime(hours)))
     {
         // The error is shown in the page, no need to handle it here
         return false;
     }
 
-    const diff = diffDays(startDate, endDate);
+    const diff = TimeMath.diffDays(startDate, endDate);
 
     if (diff < 0)
     {
@@ -284,7 +284,7 @@ async function iterateOnHolidays(func)
         const startDate = new Date(holiday['start']),
             endDate = new Date(holiday['end']),
             reason = holiday['name'];
-        const diff = diffDays(startDate, endDate) - 1;
+        const diff = TimeMath.diffDays(startDate, endDate) - 1;
         const tempDate = new Date(startDate);
         for (let i = 0; i <= diff; i++)
         {

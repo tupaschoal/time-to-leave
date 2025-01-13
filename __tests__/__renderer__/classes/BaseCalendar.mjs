@@ -17,7 +17,7 @@ import {
 import { computeAllTimeBalanceUntilAsync, timeBalanceMock } from '../../../js/time-balance.mjs';
 import { calendarApi } from '../../../renderer/preload-scripts/calendar-api.mjs';
 
-import { timeMathMock } from '../../../js/time-math.mjs';
+import TimeMath from '../../../js/time-math.mjs';
 
 const $_backup = global.$;
 
@@ -192,12 +192,12 @@ describe('BaseCalendar.js', () =>
         {
             global.$ = () => false;
             timeBalanceMock.mock('computeAllTimeBalanceUntilAsync', stub().resolves('2022-02-31'));
-            timeMathMock.mock('isNegative', stub().returns(true));
+            mocks._isNegative = stub(TimeMath, 'isNegative').returns(true);
             const preferences = {view: 'day'};
             const languageData = {hello: 'hola'};
             const calendar = new ExtendedClass(preferences, languageData);
             calendar._updateAllTimeBalance();
-            assert.strictEqual(timeMathMock.getMock('isNegative').notCalled, true);
+            assert.strictEqual(TimeMath.isNegative.notCalled, true);
             assert.strictEqual(timeBalanceMock.getMock('computeAllTimeBalanceUntilAsync').calledOnce, true);
         });
 
@@ -206,7 +206,7 @@ describe('BaseCalendar.js', () =>
             $('body').append('<span id="overall-balance" value="12:12">12:12</span>');
             $('#overall-balance').val('12:12');
             timeBalanceMock.mock('computeAllTimeBalanceUntilAsync', stub().resolves('2022-02-31'));
-            timeMathMock.mock('isNegative', stub().returns(true));
+            mocks._isNegative = stub(TimeMath, 'isNegative').returns(true);
             const preferences = {view: 'day'};
             const languageData = {hello: 'hola'};
             const calendar = new ExtendedClass(preferences, languageData);
@@ -226,7 +226,7 @@ describe('BaseCalendar.js', () =>
             $('body').append('<span class="text-success text-danger" id="overall-balance" value="12:12">12:12</span>');
             $('#overall-balance').val('12:12');
             timeBalanceMock.mock('computeAllTimeBalanceUntilAsync', stub().resolves('2022-02-31'));
-            timeMathMock.mock('isNegative', stub().returns(false));
+            mocks._isNegative = stub(TimeMath, 'isNegative').returns(false);
             const preferences = {view: 'day'};
             const languageData = {hello: 'hola'};
             const calendar = new ExtendedClass(preferences, languageData);
@@ -492,7 +492,6 @@ describe('BaseCalendar.js', () =>
             mock.restore();
         }
         timeBalanceMock.restoreAll();
-        timeMathMock.restoreAll();
         global.$ = $_backup;
         $('#overall-balance').remove();
         resetPreferences();

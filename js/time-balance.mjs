@@ -3,7 +3,7 @@
 import Store from 'electron-store';
 
 import { getDateStr } from './date-aux.mjs';
-import { subtractTime, sumTime } from './time-math.mjs';
+import TimeMath from './time-math.mjs';
 import { getUserPreferences, showDay } from './user-preferences.mjs';
 import { MockClass } from '../__mocks__/Mock.mjs';
 
@@ -87,8 +87,8 @@ function _getDayTotal(values)
         {
             for (let i = 0; i < values.length; i += 2)
             {
-                const difference = subtractTime(values[i], values[i + 1]);
-                dayTotal = sumTime(dayTotal, difference);
+                const difference = TimeMath.subtractTime(values[i], values[i + 1]);
+                dayTotal = TimeMath.sumTime(dayTotal, difference);
                 if (values[i] >= values[i + 1])
                 {
                     timesAreProgressing = false;
@@ -178,8 +178,8 @@ async function computeAllTimeBalanceUntil(limitDate)
         if (showDay(date.getFullYear(), date.getMonth(), date.getDate(), preferences))
         {
             const dayTotal = dateStr in totals ? totals[dateStr] : '00:00';
-            const dayBalance = subtractTime(hoursPerDay, dayTotal);
-            allTimeTotal = sumTime(dayBalance, allTimeTotal);
+            const dayBalance = TimeMath.subtractTime(hoursPerDay, dayTotal);
+            allTimeTotal = TimeMath.sumTime(dayBalance, allTimeTotal);
         }
         date.setDate(date.getDate() + 1);
         dateStr = getDateStr(date);

@@ -3,7 +3,7 @@
 import Store from 'electron-store';
 
 import { generateKey } from './date-db-formatter.js';
-import { hourMinToHourFormatted, sumTime } from './time-math.mjs';
+import TimeMath from './time-math.mjs';
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive), rounding up to closest multiple of 5
@@ -27,7 +27,7 @@ function randomIntFromInterval(min, max)
 function randomTime(min, max)
 {
     const rand = randomIntFromInterval(min, max);
-    const timeStr = hourMinToHourFormatted(0/*hour*/, rand/*min*/);
+    const timeStr = TimeMath.hourMinToHourFormatted(0/*hour*/, rand/*min*/);
     const negative = randomIntFromInterval(0, 1) === 1;
     return `${negative ? '-' : ''}${timeStr}`;
 }
@@ -55,10 +55,10 @@ function generateDemoInformation(dateFromStr, dateToStr, workingDays, usualTimes
             continue;
         }
 
-        const entry0 = sumTime(usualTimes[0], randomTime(0, 30));
-        const entry1 = sumTime(usualTimes[1], randomTime(0, 15));
-        const entry2 = sumTime(usualTimes[2], randomTime(0, 15));
-        const entry3 = sumTime(usualTimes[3], randomTime(0, 30));
+        const entry0 = TimeMath.sumTime(usualTimes[0], randomTime(0, 30));
+        const entry1 = TimeMath.sumTime(usualTimes[1], randomTime(0, 15));
+        const entry2 = TimeMath.sumTime(usualTimes[2], randomTime(0, 15));
+        const entry3 = TimeMath.sumTime(usualTimes[3], randomTime(0, 30));
         const entry = { values: [entry0, entry1, entry2, entry3] };
         valuesToStore[generateKey(day.getFullYear(), day.getMonth(), day.getDate())] = entry;
     }

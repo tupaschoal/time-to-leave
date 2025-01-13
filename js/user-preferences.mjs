@@ -5,7 +5,7 @@ const require = createRequire(import.meta.url);
 
 const { ipcRenderer } = require('electron');
 
-import { validateDate, validateTime } from './time-math.mjs';
+import TimeMath from './time-math.mjs';
 import { isValidTheme } from '../renderer/themes.js';
 import { getLanguagesCodes } from '../src/configs/app.config.mjs';
 
@@ -191,8 +191,8 @@ function initPreferencesFileIfNotExistsOrInvalid(filePath = getPreferencesFilePa
         {
             const timeValidationEnum = {
                 'notifications-interval' : () => isNotificationInterval(value),
-                'hours-per-day' : () =>  validateTime(value),
-                'break-time-interval' : () =>  validateTime(value),
+                'hours-per-day' : () =>  TimeMath.validateTime(value),
+                'break-time-interval' : () =>  TimeMath.validateTime(value),
             };
             if (!timeValidationEnum[key]())
             {
@@ -205,8 +205,8 @@ function initPreferencesFileIfNotExistsOrInvalid(filePath = getPreferencesFilePa
             'theme': () => isValidTheme(value),
             'view': () => isValidView(value),
             'language': () => isValidLocale(value),
-            'overall-balance-start-date': () => validateDate(value),
-            'update-remind-me-after': () => validateDate(value),
+            'overall-balance-start-date': () => TimeMath.validateDate(value),
+            'update-remind-me-after': () => TimeMath.validateDate(value),
         };
         if (key in inputEnum)
         {

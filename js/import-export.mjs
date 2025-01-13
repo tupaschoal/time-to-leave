@@ -6,7 +6,7 @@ import Store from 'electron-store';
 import fs from 'fs';
 
 import { generateKey } from './date-db-formatter.mjs';
-import { validateTime } from './time-math.mjs';
+import TimeMath from './time-math.mjs';
 import { MockClass } from '../__mocks__/Mock.mjs';
 
 /**
@@ -91,14 +91,14 @@ function validEntry(entry)
             {
                 for (const value of entry.values)
                 {
-                    validatedTime &= (validateTime(value) || value === '--:--');
+                    validatedTime &= (TimeMath.validateTime(value) || value === '--:--');
                 }
             }
         }
         else
         {
             hasExpectedProperties = entry.hasOwnProperty('data');
-            validatedTime = entry.hasOwnProperty('hours') && validateTime(entry.hours);
+            validatedTime = entry.hasOwnProperty('hours') && TimeMath.validateTime(entry.hours);
         }
         if (hasExpectedProperties && validatedDate && validatedTime)
         {
