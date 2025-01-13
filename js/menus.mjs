@@ -9,7 +9,7 @@ import { getCurrentDateTimeStr } from './date-aux.mjs';
 import ImportExport from './import-export.mjs';
 import Notification from './notification.mjs';
 import { getSavedPreferences } from './saved-preferences.mjs';
-import { checkForUpdates } from './update-manager.mjs';
+import UpdateManager from './update-manager.mjs';
 import { savePreferences } from './user-preferences.mjs';
 import { openWaiverManagerWindow, getDialogCoordinates } from './windows.mjs';
 import { getCurrentTranslation } from '../src/configs/i18next.config.mjs';
@@ -351,7 +351,7 @@ function getHelpMenuTemplate()
             label: getCurrentTranslation('$Menu.check-for-updates'),
             click()
             {
-                checkForUpdates(/*showUpToDateDialog=*/ true);
+                UpdateManager.checkForUpdates(/*showUpToDateDialog=*/ true);
             }
         },
         {

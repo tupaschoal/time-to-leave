@@ -13,7 +13,7 @@ import {
     getViewMenuTemplate
 } from './menus.mjs';
 import Notification from './notification.mjs';
-import { checkForUpdates, shouldCheckForUpdates } from './update-manager.mjs';
+import UpdateManager from './update-manager.mjs';
 import { getDefaultWidthHeight, getUserPreferences, switchCalendarView } from './user-preferences.mjs';
 import { getCurrentTranslation } from '../src/configs/i18next.config.mjs';
 
@@ -177,9 +177,9 @@ function createWindow()
 
 function triggerStartupDialogs()
 {
-    if (shouldCheckForUpdates())
+    if (UpdateManager.shouldCheckForUpdates())
     {
-        checkForUpdates(/*showUpToDateDialog=*/false);
+        UpdateManager.checkForUpdates(/*showUpToDateDialog=*/false);
     }
 }
 

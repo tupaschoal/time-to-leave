@@ -18,7 +18,7 @@ i18nMock.mock('getCurrentTranslation', stub().callsFake((code) => code));
 
 import { windowsMock } from '../../js/windows.mjs';
 import Notification from '../../js/notification.mjs';
-import { updateManagerMock } from '../../js/update-manager.mjs';
+import UpdateManager from '../../js/update-manager.mjs';
 import ImportExport from '../../js/import-export.mjs';
 
 import Store from 'electron-store';
@@ -286,11 +286,11 @@ describe('menus.js', () =>
 
         it('Should open github', (done) =>
         {
-            updateManagerMock.mock('checkForUpdates', stub().callsFake((key) =>
+            mocks._checkForUpdates = stub(UpdateManager, 'checkForUpdates').callsFake((key) =>
             {
                 assert.strictEqual(key, true);
                 done();
-            }));
+            });
             getHelpMenuTemplate()[1].click();
         });
 
@@ -571,7 +571,6 @@ describe('menus.js', () =>
         {
             mock.restore();
         }
-        updateManagerMock.restoreAll();
         windowsMock.restoreAll();
     });
 });

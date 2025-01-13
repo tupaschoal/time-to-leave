@@ -15,9 +15,7 @@ import {
     triggerStartupDialogs
 } from '../../js/main-window.mjs';
 
-import { updateManagerMock } from '../../js/update-manager.mjs';
-updateManagerMock.mock('checkForUpdates', stub());
-updateManagerMock.mock('shouldCheckForUpdates', stub());
+import UpdateManager from '../../js/update-manager.mjs';
 
 // Mocking USER_DATA_PATH for tests below
 ipcMain.handle('USER_DATA_PATH', () =>
@@ -383,28 +381,28 @@ describe('main-window.mjs', () =>
     {
         it('Should check for updates and try to migrate', () =>
         {
-            updateManagerMock.mock('shouldCheckForUpdates', stub().returns(true));
-            updateManagerMock.mock('checkForUpdates', stub());
+            stub(UpdateManager, 'shouldCheckForUpdates').returns(true);
+            stub(UpdateManager, 'checkForUpdates');
 
             triggerStartupDialogs();
-            assert.strictEqual(updateManagerMock.getMock('shouldCheckForUpdates').calledOnce, true);
-            assert.strictEqual(updateManagerMock.getMock('checkForUpdates').calledOnce, true);
+            assert.strictEqual(UpdateManager.shouldCheckForUpdates.calledOnce, true);
+            assert.strictEqual(UpdateManager.checkForUpdates.calledOnce, true);
 
-            updateManagerMock.restoreMock('shouldCheckForUpdates');
-            updateManagerMock.restoreMock('checkForUpdates');
+            UpdateManager.shouldCheckForUpdates.restore();
+            UpdateManager.checkForUpdates.restore();
         });
 
         it('Should not check for updates when shouldCheck returns falseZ', () =>
         {
-            updateManagerMock.mock('shouldCheckForUpdates', stub().returns(false));
-            updateManagerMock.mock('checkForUpdates', stub());
+            stub(UpdateManager, 'shouldCheckForUpdates').returns(false);
+            stub(UpdateManager, 'checkForUpdates');
 
             triggerStartupDialogs();
-            assert.strictEqual(updateManagerMock.getMock('shouldCheckForUpdates').calledOnce, true);
-            assert.strictEqual(updateManagerMock.getMock('checkForUpdates').calledOnce, false);
+            assert.strictEqual(UpdateManager.shouldCheckForUpdates.calledOnce, true);
+            assert.strictEqual(UpdateManager.checkForUpdates.calledOnce, false);
 
-            updateManagerMock.restoreMock('shouldCheckForUpdates');
-            updateManagerMock.restoreMock('checkForUpdates');
+            UpdateManager.shouldCheckForUpdates.restore();
+            UpdateManager.checkForUpdates.restore();
         });
     });
 
