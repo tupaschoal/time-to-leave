@@ -5,11 +5,7 @@ import Store from 'electron-store';
 import fs from 'fs';
 import path from 'path';
 
-import {
-    exportDatabaseToFile,
-    importDatabaseFromFile,
-    validEntry,
-} from '../../js/import-export.mjs';
+import ImportExport from '../../js/import-export.mjs';
 
 describe('Import export', function()
 {
@@ -22,15 +18,15 @@ describe('Import export', function()
         const badWaivedEntry = {'type': 'regular', 'date': '2020-06-03', 'data': 'day-begin', 'hours': 'not-an-hour'};
         it('should be valid', () =>
         {
-            assert.strictEqual(validEntry(goodWaivedEntry), true);
-            assert.strictEqual(validEntry(goodEntry), true);
+            assert.strictEqual(ImportExport.validEntry(goodWaivedEntry), true);
+            assert.strictEqual(ImportExport.validEntry(goodEntry), true);
         });
 
         it('should not be valid', () =>
         {
-            assert.strictEqual(validEntry(badWaivedEntry), false);
-            assert.strictEqual(validEntry(badEntry), false);
-            assert.strictEqual(validEntry(badEntry2), false);
+            assert.strictEqual(ImportExport.validEntry(badWaivedEntry), false);
+            assert.strictEqual(ImportExport.validEntry(badEntry), false);
+            assert.strictEqual(ImportExport.validEntry(badEntry2), false);
         });
     });
 
@@ -58,8 +54,8 @@ describe('Import export', function()
     {
         it('Check that export works', () =>
         {
-            assert.strictEqual(exportDatabaseToFile(path.join(folder, 'exported_file.ttldb')), true);
-            assert.strictEqual(exportDatabaseToFile('/not/a/valid/path'), false);
+            assert.strictEqual(ImportExport.exportDatabaseToFile(path.join(folder, 'exported_file.ttldb')), true);
+            assert.strictEqual(ImportExport.exportDatabaseToFile('/not/a/valid/path'), false);
         });
     });
 
@@ -77,11 +73,11 @@ describe('Import export', function()
     {
         it('Check that import works', () =>
         {
-            assert.strictEqual(importDatabaseFromFile([path.join(folder, 'exported_file.ttldb')])['result'], true);
-            assert.strictEqual(importDatabaseFromFile(['/not/a/valid/path'])['result'], false);
-            assert.strictEqual(importDatabaseFromFile(['/not/a/valid/path'])['failed'], 0);
-            assert.strictEqual(importDatabaseFromFile([invalidEntriesFile])['result'], false);
-            assert.strictEqual(importDatabaseFromFile([invalidEntriesFile])['failed'], 5);
+            assert.strictEqual(ImportExport.importDatabaseFromFile([path.join(folder, 'exported_file.ttldb')])['result'], true);
+            assert.strictEqual(ImportExport.importDatabaseFromFile(['/not/a/valid/path'])['result'], false);
+            assert.strictEqual(ImportExport.importDatabaseFromFile(['/not/a/valid/path'])['failed'], 0);
+            assert.strictEqual(ImportExport.importDatabaseFromFile([invalidEntriesFile])['result'], false);
+            assert.strictEqual(ImportExport.importDatabaseFromFile([invalidEntriesFile])['failed'], 5);
         });
     });
 

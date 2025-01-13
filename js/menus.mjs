@@ -6,7 +6,7 @@ import path from 'path';
 
 import { appConfig, getDetails, rootDir } from './app-config.mjs';
 import { getCurrentDateTimeStr } from './date-aux.mjs';
-import { importDatabaseFromFile, exportDatabaseToFile } from './import-export.mjs';
+import ImportExport from './import-export.mjs';
 import { createNotification } from './notification.mjs';
 import { getSavedPreferences } from './saved-preferences.mjs';
 import { checkForUpdates } from './update-manager.mjs';
@@ -186,7 +186,7 @@ function getEditMenuTemplate(mainWindow)
                 const response = dialog.showSaveDialogSync(options);
                 if (response)
                 {
-                    exportDatabaseToFile(response);
+                    ImportExport.exportDatabaseToFile(response);
                     dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
                         title: 'Time to Leave',
                         message: getCurrentTranslation('$Menu.database-export'),
@@ -233,7 +233,7 @@ function getEditMenuTemplate(mainWindow)
                     );
                     if (confirmation === /*Yes*/ 0)
                     {
-                        const importResult = importDatabaseFromFile(response);
+                        const importResult = ImportExport.importDatabaseFromFile(response);
                         // Reload only the calendar itself to avoid a flash
                         mainWindow.webContents.send('RELOAD_CALENDAR');
                         if (importResult['result'])
