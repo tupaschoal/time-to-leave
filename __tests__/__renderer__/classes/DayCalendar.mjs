@@ -5,7 +5,7 @@ import '../../../__mocks__/jquery.mjs';
 import assert from 'assert';
 import Store from 'electron-store';
 
-import { computeAllTimeBalanceUntilAsync } from '../../../js/time-balance.mjs';
+import TimeBalance from '../../../js/time-balance.mjs';
 import { getDefaultPreferences } from '../../../js/user-preferences.mjs';
 import { BaseCalendar } from '../../../renderer/classes/BaseCalendar.js';
 import { CalendarFactory } from '../../../renderer/classes/CalendarFactory.js';
@@ -76,7 +76,7 @@ describe('DayCalendar class Tests', () =>
         {
             return new Promise((resolve) =>
             {
-                resolve(computeAllTimeBalanceUntilAsync(targetDate));
+                resolve(TimeBalance.computeAllTimeBalanceUntilAsync(targetDate));
             });
         };
     });
