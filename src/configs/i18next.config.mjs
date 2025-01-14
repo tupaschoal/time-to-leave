@@ -1,17 +1,12 @@
 'use strict';
 
 import { ipcMain } from 'electron';
+import i18n from 'i18next';
 import i18nextBackend from 'i18next-fs-backend';
 import path from 'path';
 
 import { fallbackLng, getLanguagesCodes } from './app.config.mjs';
 import { appConfig } from '../../js/app-config.mjs';
-
-// Allow require()
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-const i18n = require('i18next');
 
 // TODO: make async below again
 import { getUserLanguage } from '../../js/user-preferences.mjs';
