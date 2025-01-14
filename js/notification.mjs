@@ -7,7 +7,7 @@ import { rootDir } from './app-config.mjs';
 import { getDateStr } from './date-aux.mjs';
 import TimeMath from './time-math.mjs';
 import { getNotificationsInterval, notificationIsEnabled, repetitionIsEnabled } from './user-preferences.mjs';
-import { getCurrentTranslation } from '../src/configs/i18next.config.mjs';
+import i18NextConfig from '../src/configs/i18next.config.mjs';
 
 let dismissToday = null;
 
@@ -83,9 +83,9 @@ class Notification
             const isRepeatingInterval = curTime > timeToLeave && (minutesDiff % notificationInterval === 0);
             if (curTime === timeToLeave || (isRepeatingInterval && repetitionIsEnabled()))
             {
-                const dismissForTodayText = getCurrentTranslation('$Notification.dismiss-for-today');
+                const dismissForTodayText = i18NextConfig.getCurrentTranslation('$Notification.dismiss-for-today');
                 const dismissBtn = {type: 'button', text: dismissForTodayText, action: 'dismiss', title: 'dismiss'};
-                return Notification.createNotification(getCurrentTranslation('$Notification.time-to-leave'), [dismissBtn])
+                return Notification.createNotification(i18NextConfig.getCurrentTranslation('$Notification.time-to-leave'), [dismissBtn])
                     .addListener('action', (response) =>
                     {
                         // Actions are only supported on macOS

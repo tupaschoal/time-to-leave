@@ -13,8 +13,7 @@ import {
     getViewMenuTemplate
 } from '../../js/menus.mjs';
 
-import { i18nMock } from '../../src/configs/i18next.config.mjs';
-i18nMock.mock('getCurrentTranslation', stub().callsFake((code) => code));
+import i18NextConfig from '../../src/configs/i18next.config.mjs';
 
 import { windowsMock } from '../../js/windows.mjs';
 import Notification from '../../js/notification.mjs';
@@ -22,11 +21,15 @@ import UpdateManager from '../../js/update-manager.mjs';
 import ImportExport from '../../js/import-export.mjs';
 
 import Store from 'electron-store';
-stub(Store, 'constructor');
 
 describe('menus.js', () =>
 {
     const mocks = {};
+    before(() =>
+    {
+        stub(i18NextConfig, 'getCurrentTranslation').callsFake((code) => code);
+        stub(Store, 'constructor');
+    });
 
     describe('getMainMenuTemplate', () =>
     {
@@ -35,9 +38,9 @@ describe('menus.js', () =>
             assert.strictEqual(getMainMenuTemplate().length, 3);
         });
 
-        getMainMenuTemplate().forEach((menu) =>
+        it('Each element should be a separator or valid field', () =>
         {
-            it('Should be a separator or valid field', () =>
+            getMainMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -92,9 +95,9 @@ describe('menus.js', () =>
             assert.strictEqual(getContextMenuTemplate().length, 3);
         });
 
-        getContextMenuTemplate().forEach((menu) =>
+        it('Each element should be a valid field', () =>
         {
-            it('Should be a valid field', () =>
+            getContextMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -154,9 +157,9 @@ describe('menus.js', () =>
             assert.strictEqual(getDockMenuTemplate().length, 1);
         });
 
-        getDockMenuTemplate().forEach((menu) =>
+        it('Each element should be a valid field', () =>
         {
-            it('Should be a valid field', () =>
+            getDockMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -194,9 +197,9 @@ describe('menus.js', () =>
             assert.strictEqual(getViewMenuTemplate().length, 2);
         });
 
-        getViewMenuTemplate().forEach((menu) =>
+        it('Each element should be a valid field', () =>
         {
-            it('Should be a valid field', () =>
+            getViewMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -251,9 +254,9 @@ describe('menus.js', () =>
             assert.strictEqual(getHelpMenuTemplate().length, 5);
         });
 
-        getHelpMenuTemplate().forEach((menu) =>
+        it('Each element should be a valid field', () =>
         {
-            it('Should be a valid field', () =>
+            getHelpMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -368,9 +371,9 @@ describe('menus.js', () =>
             assert.strictEqual(getEditMenuTemplate().length, 10);
         });
 
-        getEditMenuTemplate().forEach((menu) =>
+        it('Each element should be a separator or valid field', () =>
         {
-            it('Should be a separator or valid field', () =>
+            getEditMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -572,5 +575,11 @@ describe('menus.js', () =>
             mock.restore();
         }
         windowsMock.restoreAll();
+    });
+
+    after(() =>
+    {
+        i18NextConfig.getCurrentTranslation.restore();
+        Store.constructor.restore();
     });
 });

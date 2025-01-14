@@ -5,7 +5,7 @@ import Store from 'electron-store';
 import isOnline from 'is-online';
 
 import { getDateStr } from './date-aux.mjs';
-import { getCurrentTranslation } from '../src/configs/i18next.config.mjs';
+import i18NextConfig from '../src/configs/i18next.config.mjs';
 
 class UpdateManager
 {
@@ -42,13 +42,13 @@ class UpdateManager
                         const options = {
                             type: 'question',
                             buttons: [
-                                getCurrentTranslation('$UpdateManager.dismissBtn'),
-                                getCurrentTranslation('$UpdateManager.downloadBtn'),
-                                getCurrentTranslation('$UpdateManager.remindBtn')
+                                i18NextConfig.getCurrentTranslation('$UpdateManager.dismissBtn'),
+                                i18NextConfig.getCurrentTranslation('$UpdateManager.downloadBtn'),
+                                i18NextConfig.getCurrentTranslation('$UpdateManager.remindBtn')
                             ],
                             defaultId: 1,
-                            title: getCurrentTranslation('$UpdateManager.title'),
-                            message: getCurrentTranslation('$UpdateManager.old-version-msg'),
+                            title: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
+                            message: i18NextConfig.getCurrentTranslation('$UpdateManager.old-version-msg'),
                         };
                         const response = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), options);
                         if (response === 1)
@@ -69,9 +69,9 @@ class UpdateManager
                     {
                         const options = {
                             type: 'info',
-                            buttons: [getCurrentTranslation('$Menu.ok')],
-                            title: getCurrentTranslation('$UpdateManager.title'),
-                            message: getCurrentTranslation('$UpdateManager.upto-date-msg')
+                            buttons: [i18NextConfig.getCurrentTranslation('$Menu.ok')],
+                            title: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
+                            message: i18NextConfig.getCurrentTranslation('$UpdateManager.upto-date-msg')
                         };
                         dialog.showMessageBox(null, options);
                     }

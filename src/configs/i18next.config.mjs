@@ -6,7 +6,6 @@ import path from 'path';
 
 import { fallbackLng, getLanguagesCodes } from './app.config.mjs';
 import { appConfig } from '../../js/app-config.mjs';
-import { MockClass } from '../../__mocks__/Mock.mjs';
 
 // Allow require()
 import { createRequire } from 'module';
@@ -38,46 +37,11 @@ const i18nextOptions = {
     }
 };
 
-function setupI18n()
-{
-    const userLanguage = getUserLanguage();
-
-    return new Promise((resolve) =>
-    {
-        i18n.use(i18nextBackend);
-
-        // initialize if not already initialized
-        if (!i18n.isInitialized)
-        {
-            i18n.init(i18nextOptions, () =>
-            {
-                i18n.changeLanguage(userLanguage).then(() =>
-                {
-                    resolve();
-                });
-            });
-        }
-    });
-}
-
-function setLanguageChangedCallback(languageChangedCallback)
-{
-    i18n.on('languageChanged', () =>
-    {
-        languageChangedCallback();
-    });
-}
-
-function changeLanguage(language)
-{
-    return i18n.changeLanguage(language);
-}
-
 ipcMain.handle('CHANGE_LANGUAGE', (event, language) =>
 {
     return new Promise((resolve) =>
     {
-        changeLanguage(language).then(() =>
+        i18NextConfig.changeLanguage(language).then(() =>
         {
             resolve(getCurrentLanguageData());
         });
@@ -97,18 +61,47 @@ ipcMain.handle('GET_LANGUAGE_DATA', () =>
     };
 });
 
-function _getCurrentTranslation(code)
+class i18NextConfig
 {
-    return i18n.t(code);
+    static getCurrentTranslation(code)
+    {
+        return i18n.t(code);
+    }
+
+    static changeLanguage(language)
+    {
+        return i18n.changeLanguage(language);
+    }
+
+    static setLanguageChangedCallback(languageChangedCallback)
+    {
+        i18n.on('languageChanged', () =>
+        {
+            languageChangedCallback();
+        });
+    }
+
+    static setupI18n()
+    {
+        const userLanguage = getUserLanguage();
+
+        return new Promise((resolve) =>
+        {
+            i18n.use(i18nextBackend);
+
+            // initialize if not already initialized
+            if (!i18n.isInitialized)
+            {
+                i18n.init(i18nextOptions, () =>
+                {
+                    i18n.changeLanguage(userLanguage).then(() =>
+                    {
+                        resolve();
+                    });
+                });
+            }
+        });
+    }
 }
 
-// Enable mocking for some methods, export the mocked versions
-const mocks = {'getCurrentTranslation': _getCurrentTranslation};
-export const getCurrentTranslation = (code) => mocks['getCurrentTranslation'](code);
-export const i18nMock = new MockClass(mocks);
-
-export {
-    changeLanguage,
-    setLanguageChangedCallback,
-    setupI18n,
-};
+export default i18NextConfig;

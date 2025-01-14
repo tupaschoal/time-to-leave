@@ -15,7 +15,7 @@ import {
 import Notification from './notification.mjs';
 import UpdateManager from './update-manager.mjs';
 import { getDefaultWidthHeight, getUserPreferences, switchCalendarView } from './user-preferences.mjs';
-import { getCurrentTranslation } from '../src/configs/i18next.config.mjs';
+import i18NextConfig from '../src/configs/i18next.config.mjs';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -35,19 +35,19 @@ function createMenu()
 {
     const menu = Menu.buildFromTemplate([
         {
-            label: getCurrentTranslation('$Menu.menu'),
+            label: i18NextConfig.getCurrentTranslation('$Menu.menu'),
             submenu: getMainMenuTemplate(mainWindow)
         },
         {
-            label: getCurrentTranslation('$Menu.edit'),
+            label: i18NextConfig.getCurrentTranslation('$Menu.edit'),
             submenu: getEditMenuTemplate(mainWindow)
         },
         {
-            label: getCurrentTranslation('$Menu.view'),
+            label: i18NextConfig.getCurrentTranslation('$Menu.view'),
             submenu: getViewMenuTemplate()
         },
         {
-            label: getCurrentTranslation('$Menu.help'),
+            label: i18NextConfig.getCurrentTranslation('$Menu.help'),
             submenu: getHelpMenuTemplate()
         }
     ]);

@@ -9,7 +9,7 @@ import { handleSquirrelEvent } from './js/squirrel.mjs';
 import { openWaiverManagerWindow } from './js/windows.mjs';
 import { setupCalendarStore } from './main/calendar-aux.mjs';
 import { setupWorkdayWaiverHandlers } from './main/workday-waiver-aux.mjs';
-import { setupI18n, getCurrentTranslation, setLanguageChangedCallback } from './src/configs/i18next.config.mjs';
+import i18NextConfig from './src/configs/i18next.config.mjs';
 
 // Allow require()
 import { createRequire } from 'module';
@@ -79,7 +79,7 @@ function checkIdleAndNotify()
     if (recommendPunchIn)
     {
         recommendPunchIn = false;
-        Notification.createNotification(getCurrentTranslation('$Notification.punch-reminder')).show();
+        Notification.createNotification(i18NextConfig.getCurrentTranslation('$Notification.punch-reminder')).show();
     }
 }
 
@@ -132,7 +132,7 @@ else
 
 app.on('ready', () =>
 {
-    setupI18n(createMenu).then(() =>
+    i18NextConfig.setupI18n(createMenu).then(() =>
     {
         // On other platforms the header is automatically set, but on windows
         // we need to force the name so it doesn't appear as `electron.app.Electron`
@@ -143,7 +143,7 @@ app.on('ready', () =>
         createWindow();
         createMenu();
         setupCalendarStore();
-        setLanguageChangedCallback(createMenu);
+        i18NextConfig.setLanguageChangedCallback(createMenu);
         triggerStartupDialogs();
         setInterval(refreshOnDayChange, 60 * 60 * 1000);
         const { powerMonitor } = require('electron');
