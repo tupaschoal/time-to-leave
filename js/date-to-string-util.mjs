@@ -1,6 +1,6 @@
 'use strict';
 
-import { getTranslationInLanguageData } from '../renderer/i18n-translator.js';
+import i18nTranslator from '../renderer/i18n-translator.js';
 
 const dayAbbrs = [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ];
 const monthNames = [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ];
@@ -12,7 +12,7 @@ const monthNames = [ 'january', 'february', 'march', 'april', 'may', 'june', 'ju
  */
 function getDayAbbr(languageData, dayIndex)
 {
-    return getTranslationInLanguageData(languageData, `$DateUtil.${dayAbbrs[dayIndex]}`);
+    return i18nTranslator.getTranslationInLanguageData(languageData, `$DateUtil.${dayAbbrs[dayIndex]}`);
 }
 
 
@@ -23,7 +23,7 @@ function getDayAbbr(languageData, dayIndex)
  */
 function getMonthName(languageData, monthIndex)
 {
-    return getTranslationInLanguageData(languageData, `$DateUtil.${monthNames[monthIndex]}`);
+    return i18nTranslator.getTranslationInLanguageData(languageData, `$DateUtil.${monthNames[monthIndex]}`);
 }
 
 export {

@@ -5,7 +5,7 @@ import '../../__mocks__/jquery.mjs';
 import assert from 'assert';
 import fs from 'fs';
 import { JSDOM } from 'jsdom';
-import sinon from 'sinon';
+import { stub } from 'sinon';
 import path from 'path';
 
 import { rootDir } from '../../js/app-config.mjs';
@@ -16,8 +16,7 @@ import {
     savePreferences,
 } from '../../js/user-preferences.mjs';
 import { preferencesApi } from '../../renderer/preload-scripts/preferences-api.mjs';
-import { i18nTranslatorMock } from '../../renderer/i18n-translator.js';
-i18nTranslatorMock.mock('getTranslationInLanguageData', sinon.stub().returnsThis());
+import i18nTranslator from '../../renderer/i18n-translator.js';
 
 const isCheckBox = true;
 const weekdays = [
@@ -93,6 +92,8 @@ describe('Test Preferences Window', () =>
 {
     before(async() =>
     {
+        stub(i18nTranslator, 'getTranslationInLanguageData').returnsThis();
+
         // APIs from the preload script of the preferences window
         window.mainApi = preferencesApi;
 
@@ -330,5 +331,10 @@ describe('Test Preferences Window', () =>
                 done();
             }, 1);
         });
+    });
+
+    after(() =>
+    {
+        i18nTranslator.getTranslationInLanguageData.restore();
     });
 });

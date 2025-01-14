@@ -1,7 +1,7 @@
 'use strict';
 
 import { applyTheme } from '../renderer/themes.js';
-import { getTranslationInLanguageData, translatePage } from '../renderer/i18n-translator.js';
+import i18nTranslator from '../renderer/i18n-translator.js';
 
 // Global values for preferences page
 let usersStyles;
@@ -34,7 +34,7 @@ function listenerLanguage()
         preferences['language'] = this.value;
         window.mainApi.changeLanguagePromise(this.value).then((languageData) =>
         {
-            translatePage(this.value, languageData, 'Preferences');
+            i18nTranslator.translatePage(this.value, languageData, 'Preferences');
             window.mainApi.notifyNewPreferences(preferences);
         });
     });
@@ -46,7 +46,7 @@ function setupLanguages()
     listenerLanguage();
     window.mainApi.getLanguageDataPromise().then(languageData =>
     {
-        translatePage(usersStyles['language'], languageData.data, 'Preferences');
+        i18nTranslator.translatePage(usersStyles['language'], languageData.data, 'Preferences');
     });
 }
 
@@ -224,11 +224,11 @@ function setupListeners()
         {
             const options = {
                 type: 'question',
-                buttons: [getTranslationInLanguageData(languageData.data, '$Preferences.yes-please'), getTranslationInLanguageData(languageData.data, '$Preferences.no-thanks')],
+                buttons: [i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.yes-please'), i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.no-thanks')],
                 defaultId: 1,
                 cancelId: 1,
-                title: getTranslationInLanguageData(languageData.data, '$Preferences.reset-preferences'),
-                message: getTranslationInLanguageData(languageData.data, '$Preferences.confirm-reset-preferences'),
+                title: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.reset-preferences'),
+                message: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.confirm-reset-preferences'),
             };
             window.mainApi.showDialogSync(options).then((result) =>
             {
@@ -237,8 +237,8 @@ function setupListeners()
                     resetContent();
                     const optionsReset = {
                         type: 'info',
-                        message: getTranslationInLanguageData(languageData.data, '$Preferences.reset-preferences'),
-                        detail: getTranslationInLanguageData(languageData.data, '$Preferences.reset-success'),
+                        message: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.reset-preferences'),
+                        detail: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.reset-success'),
                     };
                     window.mainApi.showDialogSync(optionsReset);
                 }

@@ -3,7 +3,7 @@
 import TimeMath from '../../js/time-math.mjs';
 import { getDateStr, getMonthLength } from '../../js/date-aux.mjs';
 import { generateKey } from '../../js/date-db-formatter.mjs';
-import { getTranslationInLanguageData } from '../i18n-translator.js';
+import i18nTranslator from '../i18n-translator.js';
 
 // Holds the calendar information and manipulation functions
 class BaseCalendar
@@ -53,7 +53,7 @@ class BaseCalendar
      */
     _getTranslation(code)
     {
-        return getTranslationInLanguageData(this._languageData.data, code);
+        return i18nTranslator.getTranslationInLanguageData(this._languageData.data, code);
     }
 
     /**

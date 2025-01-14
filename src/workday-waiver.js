@@ -1,7 +1,7 @@
 'use strict';
 
 import { applyTheme } from '../renderer/themes.js';
-import { getTranslationInLanguageData, translatePage } from '../renderer/i18n-translator.js';
+import i18nTranslator from '../renderer/i18n-translator.js';
 import TimeMath from '../js/time-math.mjs';
 import { getDateStr } from '../js/date-aux.mjs';
 
@@ -10,7 +10,7 @@ let userPreferences;
 
 function getTranslation(code)
 {
-    return getTranslationInLanguageData(languageData.data, code);
+    return i18nTranslator.getTranslationInLanguageData(languageData.data, code);
 }
 
 function refreshDataForTest(data)
@@ -477,7 +477,7 @@ $(async() =>
         }
     });
 
-    translatePage(languageData.language, languageData.data, 'WorkdayWaiver');
+    i18nTranslator.translatePage(languageData.language, languageData.data, 'WorkdayWaiver');
 });
 
 export {
