@@ -6,7 +6,7 @@ import { appConfig } from './js/app-config.mjs';
 import { createWindow, createMenu, getMainWindow, triggerStartupDialogs } from './js/main-window.mjs';
 import Notification from './js/notification.mjs';
 import { handleSquirrelEvent } from './js/squirrel.mjs';
-import { openWaiverManagerWindow } from './js/windows.mjs';
+import Windows from './js/windows.mjs';
 import { setupCalendarStore } from './main/calendar-aux.mjs';
 import { setupWorkdayWaiverHandlers } from './main/workday-waiver-aux.mjs';
 import i18NextConfig from './src/configs/i18next.config.mjs';
@@ -32,7 +32,7 @@ ipcMain.on('SET_WAIVER_DAY', (event, waiverDay) =>
 {
     global.waiverDay = waiverDay;
     const mainWindow = getMainWindow();
-    openWaiverManagerWindow(mainWindow);
+    Windows.openWaiverManagerWindow(mainWindow);
 });
 
 ipcMain.handle('GET_WAIVER_DAY', () =>

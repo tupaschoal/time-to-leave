@@ -14,8 +14,7 @@ import {
 } from '../../js/menus.mjs';
 
 import i18NextConfig from '../../src/configs/i18next.config.mjs';
-
-import { windowsMock } from '../../js/windows.mjs';
+import Windows from '../../js/windows.mjs';
 import Notification from '../../js/notification.mjs';
 import UpdateManager from '../../js/update-manager.mjs';
 import ImportExport from '../../js/import-export.mjs';
@@ -70,10 +69,10 @@ describe('menus.js', () =>
 
         it('Should open waiver window', (done) =>
         {
-            windowsMock.mock('openWaiverManagerWindow', stub().callsFake(() =>
+            mocks._openWaiverManagerWindow = stub(Windows, 'openWaiverManagerWindow').callsFake(() =>
             {
                 done();
-            }));
+            });
             getMainMenuTemplate()[0].click();
         });
 
@@ -574,7 +573,6 @@ describe('menus.js', () =>
         {
             mock.restore();
         }
-        windowsMock.restoreAll();
     });
 
     after(() =>

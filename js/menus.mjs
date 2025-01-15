@@ -11,7 +11,7 @@ import Notification from './notification.mjs';
 import { getSavedPreferences } from './saved-preferences.mjs';
 import UpdateManager from './update-manager.mjs';
 import { savePreferences } from './user-preferences.mjs';
-import { openWaiverManagerWindow, getDialogCoordinates } from './windows.mjs';
+import Windows from './windows.mjs';
 import i18NextConfig from '../src/configs/i18next.config.mjs';
 
 function getMainMenuTemplate(mainWindow)
@@ -22,7 +22,7 @@ function getMainMenuTemplate(mainWindow)
             id: 'workday-waiver-manager',
             click(item, window, event)
             {
-                openWaiverManagerWindow(mainWindow, event);
+                Windows.openWaiverManagerWindow(mainWindow, event);
             }
         },
         { type: 'separator' },
@@ -129,7 +129,7 @@ function getEditMenuTemplate(mainWindow)
                 }
 
                 const htmlPath = path.join('file://', rootDir, 'src/preferences.html');
-                const dialogCoordinates = getDialogCoordinates(550, 620, mainWindow);
+                const dialogCoordinates = Windows.getDialogCoordinates(550, 620, mainWindow);
                 global.prefWindow = new BrowserWindow({ width: 550,
                     height: 620,
                     minWidth: 480,

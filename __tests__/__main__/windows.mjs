@@ -5,12 +5,7 @@ import { BrowserWindow } from 'electron';
 import { stub } from 'sinon';
 
 import { getDateStr } from '../../js/date-aux.mjs';
-import {
-    getDialogCoordinates,
-    getWaiverWindow,
-    openWaiverManagerWindow,
-    resetWindowsElements,
-} from '../../js/windows.mjs';
+import Windows from '../../js/windows.mjs';
 
 describe('Windows tests', () =>
 {
@@ -26,7 +21,7 @@ describe('Windows tests', () =>
 
     it('Elements should be null on starting', () =>
     {
-        assert.strictEqual(getWaiverWindow(), null);
+        assert.strictEqual(Windows.getWaiverWindow(), null);
         assert.strictEqual(global.tray, null);
         assert.strictEqual(global.contextMenu, null);
         assert.strictEqual(global.prefWindow, null);
@@ -37,12 +32,12 @@ describe('Windows tests', () =>
         const mainWindow = new BrowserWindow({
             show: false
         });
-        openWaiverManagerWindow(mainWindow);
-        assert.notStrictEqual(getWaiverWindow(), null);
-        assert.strictEqual(getWaiverWindow() instanceof BrowserWindow, true);
+        Windows.openWaiverManagerWindow(mainWindow);
+        assert.notStrictEqual(Windows.getWaiverWindow(), null);
+        assert.strictEqual(Windows.getWaiverWindow() instanceof BrowserWindow, true);
 
         // Values can vary about 10px from 600, 500
-        const size = getWaiverWindow().getSize();
+        const size = Windows.getWaiverWindow().getSize();
         assert.strictEqual(Math.abs(size[0] - 600) < 10, true);
         assert.strictEqual(Math.abs(size[1] - 500) < 10, true);
 
@@ -57,9 +52,9 @@ describe('Windows tests', () =>
         const mainWindow = new BrowserWindow({
             show: false
         });
-        openWaiverManagerWindow(mainWindow);
-        openWaiverManagerWindow(mainWindow);
-        assert.notStrictEqual(getWaiverWindow(), null);
+        Windows.openWaiverManagerWindow(mainWindow);
+        Windows.openWaiverManagerWindow(mainWindow);
+        assert.notStrictEqual(Windows.getWaiverWindow(), null);
         // It should only load once the URL because it already exists
         assert.strictEqual(showSpy.calledTwice, true);
         assert.strictEqual(loadSpy.calledOnce, true);
@@ -71,8 +66,8 @@ describe('Windows tests', () =>
         const mainWindow = new BrowserWindow({
             show: false
         });
-        openWaiverManagerWindow(mainWindow, true);
-        assert.notStrictEqual(getWaiverWindow(), null);
+        Windows.openWaiverManagerWindow(mainWindow, true);
+        assert.notStrictEqual(Windows.getWaiverWindow(), null);
         assert.strictEqual(global.waiverDay, getDateStr(new Date()));
         done();
     });
@@ -82,14 +77,14 @@ describe('Windows tests', () =>
         const mainWindow = new BrowserWindow({
             show: false
         });
-        openWaiverManagerWindow(mainWindow, true);
-        getWaiverWindow().emit('close');
-        assert.strictEqual(getWaiverWindow(), null);
+        Windows.openWaiverManagerWindow(mainWindow, true);
+        Windows.getWaiverWindow().emit('close');
+        assert.strictEqual(Windows.getWaiverWindow(), null);
     });
 
     it('Should get dialog coordinates', () =>
     {
-        const coordinates = getDialogCoordinates(500, 250, {
+        const coordinates = Windows.getDialogCoordinates(500, 250, {
             getBounds: () => ({
                 x: 200,
                 y: 300,
@@ -107,7 +102,7 @@ describe('Windows tests', () =>
     {
         showSpy.resetHistory();
         loadSpy.resetHistory();
-        resetWindowsElements();
+        Windows.resetWindowsElements();
     });
 
     after(() =>
