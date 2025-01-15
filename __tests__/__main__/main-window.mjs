@@ -4,7 +4,7 @@ import assert from 'assert';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { match, spy, stub, useFakeTimers } from 'sinon';
 
-import { notificationMock } from '../../js/notification.mjs';
+import Notification from '../../js/notification.mjs';
 import { savePreferences, getDefaultPreferences, resetPreferences } from '../../js/user-preferences.mjs';
 
 import {
@@ -15,9 +15,7 @@ import {
     triggerStartupDialogs
 } from '../../js/main-window.mjs';
 
-import { updateManagerMock } from '../../js/update-manager.mjs';
-updateManagerMock.mock('checkForUpdates', stub());
-updateManagerMock.mock('shouldCheckForUpdates', stub());
+import UpdateManager from '../../js/update-manager.mjs';
 
 // Mocking USER_DATA_PATH for tests below
 ipcMain.handle('USER_DATA_PATH', () =>
@@ -186,29 +184,29 @@ describe('main-window.mjs', () =>
             const mainWindow = getMainWindow();
             mainWindow.on('ready-to-show', () =>
             {
-                notificationMock.mock('createLeaveNotification', stub().callsFake(() =>
+                stub(Notification, 'createLeaveNotification').callsFake(() =>
                 {
                     return false;
-                }));
+                });
                 ipcMain.emit('RECEIVE_LEAVE_BY', {}, undefined);
-                assert.strictEqual(notificationMock.getMock('createLeaveNotification').calledOnce, true);
-                notificationMock.restoreMock('createLeaveNotification');
+                assert.strictEqual(Notification.createLeaveNotification.calledOnce, true);
+                Notification.createLeaveNotification.restore();
                 done();
             });
         });
 
         it('Should show notification', (done) =>
         {
-            notificationMock.mock('createLeaveNotification', stub().callsFake(() =>
+            stub(Notification, 'createLeaveNotification').callsFake(() =>
             {
                 return {
                     show: () =>
                     {
-                        notificationMock.restoreMock('createLeaveNotification');
+                        Notification.createLeaveNotification.restore();
                         done();
                     }
                 };
-            }));
+            });
             createWindow();
             /**
              * @type {BrowserWindow}
@@ -383,28 +381,28 @@ describe('main-window.mjs', () =>
     {
         it('Should check for updates and try to migrate', () =>
         {
-            updateManagerMock.mock('shouldCheckForUpdates', stub().returns(true));
-            updateManagerMock.mock('checkForUpdates', stub());
+            stub(UpdateManager, 'shouldCheckForUpdates').returns(true);
+            stub(UpdateManager, 'checkForUpdates');
 
             triggerStartupDialogs();
-            assert.strictEqual(updateManagerMock.getMock('shouldCheckForUpdates').calledOnce, true);
-            assert.strictEqual(updateManagerMock.getMock('checkForUpdates').calledOnce, true);
+            assert.strictEqual(UpdateManager.shouldCheckForUpdates.calledOnce, true);
+            assert.strictEqual(UpdateManager.checkForUpdates.calledOnce, true);
 
-            updateManagerMock.restoreMock('shouldCheckForUpdates');
-            updateManagerMock.restoreMock('checkForUpdates');
+            UpdateManager.shouldCheckForUpdates.restore();
+            UpdateManager.checkForUpdates.restore();
         });
 
         it('Should not check for updates when shouldCheck returns falseZ', () =>
         {
-            updateManagerMock.mock('shouldCheckForUpdates', stub().returns(false));
-            updateManagerMock.mock('checkForUpdates', stub());
+            stub(UpdateManager, 'shouldCheckForUpdates').returns(false);
+            stub(UpdateManager, 'checkForUpdates');
 
             triggerStartupDialogs();
-            assert.strictEqual(updateManagerMock.getMock('shouldCheckForUpdates').calledOnce, true);
-            assert.strictEqual(updateManagerMock.getMock('checkForUpdates').calledOnce, false);
+            assert.strictEqual(UpdateManager.shouldCheckForUpdates.calledOnce, true);
+            assert.strictEqual(UpdateManager.checkForUpdates.calledOnce, false);
 
-            updateManagerMock.restoreMock('shouldCheckForUpdates');
-            updateManagerMock.restoreMock('checkForUpdates');
+            UpdateManager.shouldCheckForUpdates.restore();
+            UpdateManager.checkForUpdates.restore();
         });
     });
 

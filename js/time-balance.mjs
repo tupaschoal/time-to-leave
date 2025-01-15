@@ -3,37 +3,12 @@
 import Store from 'electron-store';
 
 import { getDateStr } from './date-aux.mjs';
-import { subtractTime, sumTime } from './time-math.mjs';
+import TimeMath from './time-math.mjs';
 import { getUserPreferences, showDay } from './user-preferences.mjs';
-import { MockClass } from '../__mocks__/Mock.mjs';
 
 // Global values for calendar
 const calendarStore = new Store({ name: 'flexible-store' });
 const waivedWorkdays = new Store({ name: 'waived-workdays' });
-
-function getFirstInputInDb()
-{
-    const inputs = [];
-    const startDateStr = _getOverallBalanceStartDate();
-    const [startYear, startMonth, startDay] = startDateStr.split('-');
-    const startDate = new Date(startYear, startMonth - 1, startDay);
-
-    for (const value of calendarStore)
-    {
-        const [year, month, day] = value[0].split('-');
-        if (new Date(year, month, day) >= startDate)
-        {
-            inputs.push(value[0]);
-        }
-    }
-    inputs.sort(function(a, b)
-    {
-        const [aYear, aMonth, aDay] = a.split('-');
-        const [bYear, bMonth, bDay] = b.split('-');
-        return new Date(aYear, aMonth, aDay) - new Date(bYear, bMonth, bDay);
-    });
-    return inputs.length ? inputs[0] : '';
-}
 
 /**
 * @param {string} dbKey given key of the db
@@ -87,8 +62,8 @@ function _getDayTotal(values)
         {
             for (let i = 0; i < values.length; i += 2)
             {
-                const difference = subtractTime(values[i], values[i + 1]);
-                dayTotal = sumTime(dayTotal, difference);
+                const difference = TimeMath.subtractTime(values[i], values[i + 1]);
+                dayTotal = TimeMath.sumTime(dayTotal, difference);
                 if (values[i] >= values[i + 1])
                 {
                     timesAreProgressing = false;
@@ -151,63 +126,82 @@ function _getDayTotalsFromStores(firstDate, limitDate)
     return totals;
 }
 
-/**
-* Computation of all time balance, including limitDay.
-* @param {Date} limitDate
-*/
-async function computeAllTimeBalanceUntil(limitDate)
+class TimeBalance
 {
-    const firstInput = getFirstInputInDb();
-    if (firstInput === '')
+    static getFirstInputInDb()
     {
-        return '00:00';
-    }
-    const [firstYear, firstMonth, firstDay] = firstInput.split('-');
-    const firstDate = new Date(firstYear, firstMonth, firstDay);
+        const inputs = [];
+        const startDateStr = _getOverallBalanceStartDate();
+        const [startYear, startMonth, startDay] = startDateStr.split('-');
+        const startDate = new Date(startYear, startMonth - 1, startDay);
 
-    const totals = _getDayTotalsFromStores(firstDate, limitDate);
-
-    const preferences = getUserPreferences();
-    const hoursPerDay = _getHoursPerDay();
-    let allTimeTotal = '00:00';
-    const date = new Date(firstDate);
-    const limitDateStr = getDateStr(limitDate);
-    let dateStr = getDateStr(date);
-    while (dateStr !== limitDateStr && limitDate > date)
-    {
-        if (showDay(date.getFullYear(), date.getMonth(), date.getDate(), preferences))
+        for (const value of calendarStore)
         {
-            const dayTotal = dateStr in totals ? totals[dateStr] : '00:00';
-            const dayBalance = subtractTime(hoursPerDay, dayTotal);
-            allTimeTotal = sumTime(dayBalance, allTimeTotal);
+            const [year, month, day] = value[0].split('-');
+            if (new Date(year, month, day) >= startDate)
+            {
+                inputs.push(value[0]);
+            }
         }
-        date.setDate(date.getDate() + 1);
-        dateStr = getDateStr(date);
-    }
-    return allTimeTotal;
-}
-
-/**
-* Computes all time balance using an async promise.
-* @param {Date} limitDate
-*/
-async function _computeAllTimeBalanceUntilAsync(limitDate)
-{
-    return new Promise(resolve =>
-    {
-        setTimeout(() =>
+        inputs.sort(function(a, b)
         {
-            resolve(computeAllTimeBalanceUntil(limitDate));
-        }, 1);
-    });
+            const [aYear, aMonth, aDay] = a.split('-');
+            const [bYear, bMonth, bDay] = b.split('-');
+            return new Date(aYear, aMonth, aDay) - new Date(bYear, bMonth, bDay);
+        });
+        return inputs.length ? inputs[0] : '';
+    }
+
+    /**
+    * Computation of all time balance, including limitDay.
+    * @param {Date} limitDate
+    */
+    static async computeAllTimeBalanceUntil(limitDate)
+    {
+        const firstInput = TimeBalance.getFirstInputInDb();
+        if (firstInput === '')
+        {
+            return '00:00';
+        }
+        const [firstYear, firstMonth, firstDay] = firstInput.split('-');
+        const firstDate = new Date(firstYear, firstMonth, firstDay);
+
+        const totals = _getDayTotalsFromStores(firstDate, limitDate);
+
+        const preferences = getUserPreferences();
+        const hoursPerDay = _getHoursPerDay();
+        let allTimeTotal = '00:00';
+        const date = new Date(firstDate);
+        const limitDateStr = getDateStr(limitDate);
+        let dateStr = getDateStr(date);
+        while (dateStr !== limitDateStr && limitDate > date)
+        {
+            if (showDay(date.getFullYear(), date.getMonth(), date.getDate(), preferences))
+            {
+                const dayTotal = dateStr in totals ? totals[dateStr] : '00:00';
+                const dayBalance = TimeMath.subtractTime(hoursPerDay, dayTotal);
+                allTimeTotal = TimeMath.sumTime(dayBalance, allTimeTotal);
+            }
+            date.setDate(date.getDate() + 1);
+            dateStr = getDateStr(date);
+        }
+        return allTimeTotal;
+    }
+
+    /**
+    * Computes all time balance using an async promise.
+    * @param {Date} limitDate
+    */
+    static async computeAllTimeBalanceUntilAsync(limitDate)
+    {
+        return new Promise(resolve =>
+        {
+            setTimeout(() =>
+            {
+                resolve(TimeBalance.computeAllTimeBalanceUntil(limitDate));
+            }, 1);
+        });
+    }
 }
 
-// Enable mocking for some methods, export the mocked versions
-const mocks = {'computeAllTimeBalanceUntilAsync': _computeAllTimeBalanceUntilAsync};
-export const computeAllTimeBalanceUntilAsync = (limitDate) => mocks['computeAllTimeBalanceUntilAsync'](limitDate);
-export const timeBalanceMock = new MockClass(mocks);
-
-export {
-    computeAllTimeBalanceUntil,
-    getFirstInputInDb,
-};
+export default TimeBalance;

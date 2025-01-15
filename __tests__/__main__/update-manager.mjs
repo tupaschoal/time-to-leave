@@ -6,7 +6,7 @@ import { stub } from 'sinon';
 import Store from 'electron-store';
 
 import { getDateStr } from '../../js/date-aux.mjs';
-import { checkForUpdates, shouldCheckForUpdates } from '../../js/update-manager.mjs';
+import UpdateManager from '../../js/update-manager.mjs';
 
 describe('Update Manager', () =>
 {
@@ -16,7 +16,7 @@ describe('Update Manager', () =>
         {
             const store = new Store();
             store.set('update-remind-me-after', false);
-            assert.strictEqual(shouldCheckForUpdates(), true);
+            assert.strictEqual(UpdateManager.shouldCheckForUpdates(), true);
         });
 
         it('Should return true when was checked before today', () =>
@@ -25,7 +25,7 @@ describe('Update Manager', () =>
             now.setDate(now.getDate() - 1);
             const store = new Store();
             store.set('update-remind-me-after', getDateStr(now));
-            assert.strictEqual(shouldCheckForUpdates(), true);
+            assert.strictEqual(UpdateManager.shouldCheckForUpdates(), true);
         });
 
         it('Should return false when was checked today', () =>
@@ -33,7 +33,7 @@ describe('Update Manager', () =>
             const now = new Date();
             const store = new Store();
             store.set('update-remind-me-after', getDateStr(now));
-            assert.strictEqual(shouldCheckForUpdates(), false);
+            assert.strictEqual(UpdateManager.shouldCheckForUpdates(), false);
         });
     });
 
@@ -45,7 +45,7 @@ describe('Update Manager', () =>
                 on: () => {},
                 end: () => {}
             });
-            checkForUpdates();
+            UpdateManager.checkForUpdates();
             assert.strictEqual(netStub.notCalled, true);
             netStub.restore();
         });
@@ -61,7 +61,7 @@ describe('Update Manager', () =>
                 },
                 end: () => {}
             });
-            checkForUpdates();
+            UpdateManager.checkForUpdates();
         });
     });
 });

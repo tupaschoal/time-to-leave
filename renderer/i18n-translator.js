@@ -1,7 +1,5 @@
 'use strict';
 
-import { MockClass } from '../__mocks__/Mock.mjs';
-
 function getDataRecursive(array, keyList)
 {
     if (keyList.length === 0)
@@ -18,43 +16,42 @@ function getDataRecursive(array, keyList)
     }
 }
 
-function _getTranslationInLanguageData(languageData, key)
+class i18nTranslator
 {
-    const keyList = key.split('.');
-    return getDataRecursive(languageData['translation'], keyList);
-}
-
-function _translatePage(language, languageData, windowName)
-{
-    $('html').attr('lang', language);
-
-    function translateElement(element)
+    static getTranslationInLanguageData(languageData, key)
     {
-        const attr = $(element).attr('data-i18n');
-        if (typeof attr !== 'undefined' && attr !== false && attr.length > 0)
-        {
-            $(element).html(getTranslationInLanguageData(languageData, attr));
-        }
+        const keyList = key.split('.');
+        return getDataRecursive(languageData['translation'], keyList);
     }
 
-    const callback = (key, value) => { translateElement(value); };
-    $('title').each(callback);
-    $('body').each(callback);
-    $('p').each(callback);
-    $('label').each(callback);
-    $('div').each(callback);
-    $('span').each(callback);
-    $('option').each(callback);
-    $('th').each(callback);
-    $('a').each(callback);
-    $('button').each(callback);
+    static translatePage(language, languageData, windowName)
+    {
+        $('html').attr('lang', language);
 
-    const titleAttr = `$${windowName}.title`;
-    $(document).attr('title', `Time to Leave - ${getTranslationInLanguageData(languageData, titleAttr)}`);
+        function translateElement(element)
+        {
+            const attr = $(element).attr('data-i18n');
+            if (typeof attr !== 'undefined' && attr !== false && attr.length > 0)
+            {
+                $(element).html(i18nTranslator.getTranslationInLanguageData(languageData, attr));
+            }
+        }
+
+        const callback = (key, value) => { translateElement(value); };
+        $('title').each(callback);
+        $('body').each(callback);
+        $('p').each(callback);
+        $('label').each(callback);
+        $('div').each(callback);
+        $('span').each(callback);
+        $('option').each(callback);
+        $('th').each(callback);
+        $('a').each(callback);
+        $('button').each(callback);
+
+        const titleAttr = `$${windowName}.title`;
+        $(document).attr('title', `Time to Leave - ${i18nTranslator.getTranslationInLanguageData(languageData, titleAttr)}`);
+    }
 }
 
-// Enable mocking for some methods, export the mocked versions
-const mocks = {'getTranslationInLanguageData': _getTranslationInLanguageData, 'translatePage': _translatePage};
-export const getTranslationInLanguageData = (languageData, key) => mocks['getTranslationInLanguageData'](languageData, key);
-export const translatePage = (language, languageData, windowName) => mocks['translatePage'](language, languageData, windowName);
-export const i18nTranslatorMock = new MockClass(mocks);
+export default i18nTranslator;

@@ -1,15 +1,9 @@
 'use strict';
 
-import {
-    hourMinToHourFormatted,
-    isNegative,
-    subtractTime,
-    sumTime,
-    validateTime
-} from '../../js/time-math.mjs';
+import TimeMath from '../../js/time-math.mjs';
 import { getDateStr, getMonthLength } from '../../js/date-aux.mjs';
 import { generateKey } from '../../js/date-db-formatter.mjs';
-import { getTranslationInLanguageData } from '../i18n-translator.js';
+import i18nTranslator from '../i18n-translator.js';
 
 // Holds the calendar information and manipulation functions
 class BaseCalendar
@@ -59,7 +53,7 @@ class BaseCalendar
      */
     _getTranslation(code)
     {
-        return getTranslationInLanguageData(this._languageData.data, code);
+        return i18nTranslator.getTranslationInLanguageData(this._languageData.data, code);
     }
 
     /**
@@ -75,7 +69,7 @@ class BaseCalendar
                 if (balanceElement)
                 {
                     balanceElement.val(balance).removeClass('text-success text-danger')
-                        .html(balance).addClass(isNegative(balance) ? 'text-danger' : 'text-success');
+                        .html(balance).addClass(TimeMath.isNegative(balance) ? 'text-danger' : 'text-success');
                 }
             })
             .catch(err =>
@@ -215,8 +209,8 @@ class BaseCalendar
                 {
                     for (let i = 0; i < validatedTimes.length; i += 2)
                     {
-                        const difference = subtractTime(validatedTimes[i], validatedTimes[i + 1]);
-                        dayTotal = sumTime(dayTotal, difference);
+                        const difference = TimeMath.subtractTime(validatedTimes[i], validatedTimes[i + 1]);
+                        dayTotal = TimeMath.sumTime(dayTotal, difference);
                         if (validatedTimes[i] >= validatedTimes[i + 1])
                         {
                             timesAreProgressing = false;
@@ -493,9 +487,9 @@ class BaseCalendar
     _calculateBreakEnd(breakBegin)
     {
         const breakInterval = this._getBreakTimeInterval();
-        let breakEnd = sumTime(breakBegin, breakInterval);
+        let breakEnd = TimeMath.sumTime(breakBegin, breakInterval);
 
-        breakEnd = validateTime(breakEnd) ? breakEnd : '23:59';
+        breakEnd = TimeMath.validateTime(breakEnd) ? breakEnd : '23:59';
         return breakEnd;
     }
 
@@ -523,7 +517,7 @@ class BaseCalendar
             this._addTodayEntries();
         }
 
-        const value = hourMinToHourFormatted(hour, min);
+        const value = TimeMath.hourMinToHourFormatted(hour, min);
         const key = generateKey(year, month, day);
         const inputs = $('#' + key + ' input[type="time"]');
 
@@ -618,8 +612,8 @@ class BaseCalendar
             {
                 for (let i = 0; i < validatedTimes.length; i += 2)
                 {
-                    const difference = subtractTime(validatedTimes[i], validatedTimes[i + 1]);
-                    dayTotal = sumTime(dayTotal, difference);
+                    const difference = TimeMath.subtractTime(validatedTimes[i], validatedTimes[i + 1]);
+                    dayTotal = TimeMath.sumTime(dayTotal, difference);
                     if (validatedTimes[i] >= validatedTimes[i + 1])
                     {
                         timesAreProgressing = false;
@@ -650,8 +644,8 @@ class BaseCalendar
             let timesAreProgressing = true;
             for (let i = 0; i < smallestMultipleOfTwo; i += 2)
             {
-                const difference = subtractTime(validatedTimes[i], validatedTimes[i + 1]);
-                dayTotal = sumTime(dayTotal, difference);
+                const difference = TimeMath.subtractTime(validatedTimes[i], validatedTimes[i + 1]);
+                dayTotal = TimeMath.sumTime(dayTotal, difference);
                 if (validatedTimes[i] >= validatedTimes[i + 1])
                 {
                     timesAreProgressing = false;
@@ -660,8 +654,8 @@ class BaseCalendar
             if (timesAreProgressing)
             {
                 const lastTime = validatedTimes[validatedTimes.length-1];
-                const remainingTime = subtractTime(dayTotal, this._getHoursPerDay());
-                leaveBy = sumTime(lastTime, remainingTime);
+                const remainingTime = TimeMath.subtractTime(dayTotal, this._getHoursPerDay());
+                leaveBy = TimeMath.sumTime(lastTime, remainingTime);
             }
         }
         return leaveBy;
@@ -681,7 +675,7 @@ class BaseCalendar
         {
             for (const time of values)
             {
-                validatedTimes.push(validateTime(time) ? time : '--:--');
+                validatedTimes.push(TimeMath.validateTime(time) ? time : '--:--');
             }
         }
 

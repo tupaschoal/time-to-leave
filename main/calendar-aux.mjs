@@ -3,7 +3,7 @@
 import { ipcMain } from 'electron';
 import Store from 'electron-store';
 
-import { computeAllTimeBalanceUntilAsync } from '../js/time-balance.mjs';
+import TimeBalance from '../js/time-balance.mjs';
 
 const calendarStore = new Store({name: 'flexible-store'});
 
@@ -33,7 +33,7 @@ function setupCalendarStore()
 
     ipcMain.handle('COMPUTE_ALL_TIME_BALANCE_UNTIL', (event, targetDate) =>
     {
-        return computeAllTimeBalanceUntilAsync(targetDate);
+        return TimeBalance.computeAllTimeBalanceUntilAsync(targetDate);
     });
 }
 

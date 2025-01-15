@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 'use strict';
 
 import assert from 'assert';
@@ -14,20 +13,22 @@ import {
     getViewMenuTemplate
 } from '../../js/menus.mjs';
 
-import { i18nMock } from '../../src/configs/i18next.config.mjs';
-i18nMock.mock('getCurrentTranslation', stub().callsFake((code) => code));
-
-import { windowsMock } from '../../js/windows.mjs';
-import { notificationMock } from '../../js/notification.mjs';
-import { updateManagerMock } from '../../js/update-manager.mjs';
-import { importExportMock } from '../../js/import-export.mjs';
+import i18NextConfig from '../../src/configs/i18next.config.mjs';
+import Windows from '../../js/windows.mjs';
+import Notification from '../../js/notification.mjs';
+import UpdateManager from '../../js/update-manager.mjs';
+import ImportExport from '../../js/import-export.mjs';
 
 import Store from 'electron-store';
-stub(Store, 'constructor');
 
 describe('menus.js', () =>
 {
     const mocks = {};
+    before(() =>
+    {
+        stub(i18NextConfig, 'getCurrentTranslation').callsFake((code) => code);
+        stub(Store, 'constructor');
+    });
 
     describe('getMainMenuTemplate', () =>
     {
@@ -36,9 +37,9 @@ describe('menus.js', () =>
             assert.strictEqual(getMainMenuTemplate().length, 3);
         });
 
-        getMainMenuTemplate().forEach((menu) =>
+        it('Each element should be a separator or valid field', () =>
         {
-            it('Should be a separator or valid field', () =>
+            getMainMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -68,10 +69,10 @@ describe('menus.js', () =>
 
         it('Should open waiver window', (done) =>
         {
-            windowsMock.mock('openWaiverManagerWindow', stub().callsFake(() =>
+            mocks._openWaiverManagerWindow = stub(Windows, 'openWaiverManagerWindow').callsFake(() =>
             {
                 done();
-            }));
+            });
             getMainMenuTemplate()[0].click();
         });
 
@@ -93,9 +94,9 @@ describe('menus.js', () =>
             assert.strictEqual(getContextMenuTemplate().length, 3);
         });
 
-        getContextMenuTemplate().forEach((menu) =>
+        it('Each element should be a valid field', () =>
         {
-            it('Should be a valid field', () =>
+            getContextMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -119,11 +120,11 @@ describe('menus.js', () =>
                     }
                 }
             };
-            notificationMock.mock('createNotification', stub().callsFake(() => ({
+            mocks._createNotification = stub(Notification, 'createNotification').callsFake(() => ({
                 show: stub()
-            })));
+            }));
             getContextMenuTemplate(mainWindow)[0].click();
-            assert.strictEqual(notificationMock.getMock('createNotification').calledOnce, true);
+            assert.strictEqual(Notification.createNotification.calledOnce, true);
         });
 
         it('Should create notification on click', (done) =>
@@ -134,15 +135,17 @@ describe('menus.js', () =>
             getContextMenuTemplate(mainWindow)[1].click();
         });
 
-        it('Should show window on click', (done) =>
+        it('Should show window on click', async() =>
         {
-            const quitStub = stub(app, 'quit').callsFake(() =>
+            await new Promise((resolve) =>
             {
-                quitStub.restore();
-                done();
+                mocks._quitStub = stub(app, 'quit').callsFake(() =>
+                {
+                    resolve();
+                });
+                getContextMenuTemplate({})[2].click();
             });
-            getContextMenuTemplate({})[2].click();
-            expect(mocks.quit).toBeCalledTimes(1);
+            assert.strictEqual(mocks._quitStub.calledOnce, true);
         });
     });
 
@@ -153,9 +156,9 @@ describe('menus.js', () =>
             assert.strictEqual(getDockMenuTemplate().length, 1);
         });
 
-        getDockMenuTemplate().forEach((menu) =>
+        it('Each element should be a valid field', () =>
         {
-            it('Should be a valid field', () =>
+            getDockMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -178,11 +181,11 @@ describe('menus.js', () =>
                     }
                 }
             };
-            notificationMock.mock('createNotification', stub().callsFake(() => ({
+            mocks._createNotification = stub(Notification, 'createNotification').callsFake(() => ({
                 show: done
-            })));
+            }));
             getDockMenuTemplate(mainWindow)[0].click();
-            assert.strictEqual(notificationMock.getMock('createNotification').calledOnce, true);
+            assert.strictEqual(Notification.createNotification.calledOnce, true);
         });
     });
 
@@ -193,9 +196,9 @@ describe('menus.js', () =>
             assert.strictEqual(getViewMenuTemplate().length, 2);
         });
 
-        getViewMenuTemplate().forEach((menu) =>
+        it('Each element should be a valid field', () =>
         {
-            it('Should be a valid field', () =>
+            getViewMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -250,9 +253,9 @@ describe('menus.js', () =>
             assert.strictEqual(getHelpMenuTemplate().length, 5);
         });
 
-        getHelpMenuTemplate().forEach((menu) =>
+        it('Each element should be a valid field', () =>
         {
-            it('Should be a valid field', () =>
+            getHelpMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -285,11 +288,11 @@ describe('menus.js', () =>
 
         it('Should open github', (done) =>
         {
-            updateManagerMock.mock('checkForUpdates', stub().callsFake((key) =>
+            mocks._checkForUpdates = stub(UpdateManager, 'checkForUpdates').callsFake((key) =>
             {
                 assert.strictEqual(key, true);
                 done();
-            }));
+            });
             getHelpMenuTemplate()[1].click();
         });
 
@@ -367,9 +370,9 @@ describe('menus.js', () =>
             assert.strictEqual(getEditMenuTemplate().length, 10);
         });
 
-        getEditMenuTemplate().forEach((menu) =>
+        it('Each element should be a separator or valid field', () =>
         {
-            it('Should be a separator or valid field', () =>
+            getEditMenuTemplate().forEach((menu) =>
             {
                 const tests = [
                     {field : 'label', type: 'string'},
@@ -407,22 +410,22 @@ describe('menus.js', () =>
         it('Should show dialog for exporting db', () =>
         {
             const showDialogSyncStub = stub(dialog, 'showSaveDialogSync').returns(true);
-            importExportMock.mock('exportDatabaseToFile', stub());
+            mocks._exportDatabaseTofile = stub(ImportExport, 'exportDatabaseToFile');
             getEditMenuTemplate()[7].click();
             assert.strictEqual(showDialogSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxStub.calledOnce, true);
-            assert.strictEqual(importExportMock.getMock('exportDatabaseToFile').calledOnce, true);
+            assert.strictEqual(ImportExport.exportDatabaseToFile.calledOnce, true);
             showDialogSyncStub.restore();
         });
 
         it('Should not show dialog for exporting db', () =>
         {
             const showDialogSyncStub = stub(dialog, 'showSaveDialogSync').returns(false);
-            importExportMock.mock('exportDatabaseToFile', stub());
+            mocks._exportDatabaseTofile = stub(ImportExport, 'exportDatabaseToFile');
             getEditMenuTemplate()[7].click();
             assert.strictEqual(showDialogSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxStub.notCalled, true);
-            assert.strictEqual(importExportMock.getMock('exportDatabaseToFile').notCalled, true);
+            assert.strictEqual(ImportExport.exportDatabaseToFile.notCalled, true);
             showDialogSyncStub.restore();
         });
 
@@ -438,15 +441,15 @@ describe('menus.js', () =>
             };
             const showOpenDialogSyncStub = stub(dialog, 'showOpenDialogSync').returns(true);
             const showMessageBoxSyncStub = stub(dialog, 'showMessageBoxSync').returns(0);
-            importExportMock.mock('importDatabaseFromFile', stub().returns({
+            mocks._importDatabaseFromFile = stub(ImportExport, 'importDatabaseFromFile').returns({
                 result: true,
                 failed: 0
-            }));
+            });
             getEditMenuTemplate(mainWindow)[8].click();
             assert.strictEqual(showOpenDialogSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxStub.calledOnce, true);
-            assert.strictEqual(importExportMock.getMock('importDatabaseFromFile').calledOnce, true);
+            assert.strictEqual(ImportExport.importDatabaseFromFile.calledOnce, true);
             showOpenDialogSyncStub.restore();
             showMessageBoxSyncStub.restore();
         });
@@ -463,15 +466,15 @@ describe('menus.js', () =>
             };
             const showOpenDialogSyncStub = stub(dialog, 'showOpenDialogSync').returns(true);
             const showMessageBoxSyncStub = stub(dialog, 'showMessageBoxSync').returns(0);
-            importExportMock.mock('importDatabaseFromFile', stub().returns({
+            mocks._importDatabaseFromFile = stub(ImportExport, 'importDatabaseFromFile').returns({
                 result: false,
                 failed: 1
-            }));
+            });
             getEditMenuTemplate(mainWindow)[8].click();
             assert.strictEqual(showOpenDialogSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxSyncStub.calledTwice, true);
             assert.strictEqual(showMessageBoxStub.notCalled, true);
-            assert.strictEqual(importExportMock.getMock('importDatabaseFromFile').calledOnce, true);
+            assert.strictEqual(ImportExport.importDatabaseFromFile.calledOnce, true);
             showOpenDialogSyncStub.restore();
             showMessageBoxSyncStub.restore();
         });
@@ -488,15 +491,15 @@ describe('menus.js', () =>
             };
             const showOpenDialogSyncStub = stub(dialog, 'showOpenDialogSync').returns(true);
             const showMessageBoxSyncStub = stub(dialog, 'showMessageBoxSync').returns(0);
-            importExportMock.mock('importDatabaseFromFile', stub().returns({
+            mocks._importDatabaseFromFile = stub(ImportExport, 'importDatabaseFromFile').returns({
                 result: false,
                 failed: 0
-            }));
+            });
             getEditMenuTemplate(mainWindow)[8].click();
             assert.strictEqual(showOpenDialogSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxSyncStub.calledTwice, true);
             assert.strictEqual(showMessageBoxStub.notCalled, true);
-            assert.strictEqual(importExportMock.getMock('importDatabaseFromFile').calledOnce, true);
+            assert.strictEqual(ImportExport.importDatabaseFromFile.calledOnce, true);
             showOpenDialogSyncStub.restore();
             showMessageBoxSyncStub.restore();
         });
@@ -505,12 +508,12 @@ describe('menus.js', () =>
         {
             const showOpenDialogSyncStub = stub(dialog, 'showOpenDialogSync').returns(false);
             const showMessageBoxSyncStub = stub(dialog, 'showMessageBoxSync').returns(1);
-            importExportMock.mock('importDatabaseFromFile', stub());
+            mocks._importDatabaseFromFile = stub(ImportExport, 'importDatabaseFromFile');
             getEditMenuTemplate()[8].click();
             assert.strictEqual(showOpenDialogSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxSyncStub.notCalled, true);
             assert.strictEqual(showMessageBoxStub.notCalled, true);
-            assert.strictEqual(importExportMock.getMock('importDatabaseFromFile').notCalled, true);
+            assert.strictEqual(ImportExport.importDatabaseFromFile.notCalled, true);
             showOpenDialogSyncStub.restore();
             showMessageBoxSyncStub.restore();
         });
@@ -519,12 +522,12 @@ describe('menus.js', () =>
         {
             const showOpenDialogSyncStub = stub(dialog, 'showOpenDialogSync').returns(true);
             const showMessageBoxSyncStub = stub(dialog, 'showMessageBoxSync').returns(1);
-            importExportMock.mock('importDatabaseFromFile', stub());
+            mocks._importDatabaseFromFile = stub(ImportExport, 'importDatabaseFromFile');
             getEditMenuTemplate()[8].click();
             assert.strictEqual(showOpenDialogSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxStub.notCalled, true);
-            assert.strictEqual(importExportMock.getMock('importDatabaseFromFile').notCalled, true);
+            assert.strictEqual(ImportExport.importDatabaseFromFile.notCalled, true);
             showOpenDialogSyncStub.restore();
             showMessageBoxSyncStub.restore();
         });
@@ -566,9 +569,15 @@ describe('menus.js', () =>
 
     afterEach(() =>
     {
-        importExportMock.restoreAll();
-        notificationMock.restoreAll();
-        updateManagerMock.restoreAll();
-        windowsMock.restoreAll();
+        for (const mock of Object.values(mocks))
+        {
+            mock.restore();
+        }
+    });
+
+    after(() =>
+    {
+        i18NextConfig.getCurrentTranslation.restore();
+        Store.constructor.restore();
     });
 });

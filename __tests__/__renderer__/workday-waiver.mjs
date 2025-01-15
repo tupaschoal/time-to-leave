@@ -7,7 +7,7 @@ import assert from 'assert';
 import Holidays from 'date-holidays';
 import Store from 'electron-store';
 import { JSDOM } from 'jsdom';
-import sinon from 'sinon';
+import { stub } from 'sinon';
 import path from 'path';
 
 import { rootDir } from '../../js/app-config.mjs';
@@ -23,11 +23,8 @@ import {
     getUserPreferencesPromise,
     savePreferences,
 } from '../../js/user-preferences.mjs';
+import i18nTranslator from '../../renderer/i18n-translator.js';
 
-
-import { i18nTranslatorMock } from '../../renderer/i18n-translator.js';
-i18nTranslatorMock.mock('translatePage', sinon.stub().returnsThis());
-i18nTranslatorMock.mock('getTranslationInLanguageData', sinon.stub().returnsThis());
 
 const waiverStore = new Store({name: 'waived-workdays'});
 
@@ -90,6 +87,9 @@ describe('Test Workday Waiver Window', function()
 {
     before(async() =>
     {
+        stub(i18nTranslator, 'translatePage').returnsThis();
+        stub(i18nTranslator, 'getTranslationInLanguageData').returnsThis();
+
         // Using dynamic imports because when the file is imported a $() callback is triggered and
         // methods must be mocked before-hand
         const file = await import('../../src/workday-waiver.js');
@@ -468,7 +468,7 @@ describe('Test Workday Waiver Window', function()
             $('#state').append($('<option selected></option>').val(state).html(state));
             const holidays = await getHolidays();
             const holidaysLength = holidays.length;
-            const mockCallback = sinon.stub();
+            const mockCallback = stub();
             await iterateOnHolidays(mockCallback);
             assert.strictEqual(mockCallback.getCalls().length, holidaysLength);
         });
@@ -616,5 +616,11 @@ describe('Test Workday Waiver Window', function()
             rowLength = $('#waiver-list-table tbody tr').length;
             assert.strictEqual(rowLength, 0);
         });
+    });
+
+    after(() =>
+    {
+        i18nTranslator.translatePage.restore();
+        i18nTranslator.getTranslationInLanguageData.restore();
     });
 });

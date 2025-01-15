@@ -2,7 +2,7 @@
 
 import { app, ipcMain } from 'electron';
 
-import { changeLanguage } from '../src/configs/i18next.config.mjs';
+import i18NextConfig from '../src/configs/i18next.config.mjs';
 
 let savedPreferences = null;
 
@@ -17,7 +17,7 @@ ipcMain.on('PREFERENCE_SAVE_DATA_NEEDED', (event, preferences) =>
     app.setLoginItemSettings({
         openAtLogin: preferences['start-at-login']
     });
-    changeLanguage(preferences.language).catch((err) =>
+    i18NextConfig.changeLanguage(preferences.language).catch((err) =>
     {
         if (err) return console.log('something went wrong loading', err);
     });

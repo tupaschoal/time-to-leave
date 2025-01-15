@@ -14,10 +14,10 @@ import {
     savePreferences,
     switchCalendarView
 } from '../../../js/user-preferences.mjs';
-import { computeAllTimeBalanceUntilAsync, timeBalanceMock } from '../../../js/time-balance.mjs';
+import TimeBalance from '../../../js/time-balance.mjs';
 import { calendarApi } from '../../../renderer/preload-scripts/calendar-api.mjs';
 
-import { timeMathMock } from '../../../js/time-math.mjs';
+import TimeMath from '../../../js/time-math.mjs';
 
 const $_backup = global.$;
 
@@ -49,7 +49,7 @@ describe('BaseCalendar.js', () =>
 
         window.mainApi.computeAllTimeBalanceUntilPromise = (targetDate) =>
         {
-            return computeAllTimeBalanceUntilAsync(targetDate);
+            return TimeBalance.computeAllTimeBalanceUntilAsync(targetDate);
         };
 
         window.mainApi.switchView = () =>
@@ -162,23 +162,23 @@ describe('BaseCalendar.js', () =>
         it('Should not update value because of no implementation', () =>
         {
             delete ExtendedClass.prototype._getTargetDayForAllTimeBalance;
-            timeBalanceMock.mock('computeAllTimeBalanceUntilAsync', stub().resolves());
+            mocks._computeAllTimeBalanceUntilAsyn = stub(TimeBalance, 'computeAllTimeBalanceUntilAsync').resolves();
             const preferences = {view: 'day'};
             const languageData = {hello: 'hola'};
             const calendar = new ExtendedClass(preferences, languageData);
             assert.throws(() => calendar._updateAllTimeBalance(), /Please implement this\.$/);
-            assert.strictEqual(timeBalanceMock.getMock('computeAllTimeBalanceUntilAsync').notCalled, true);
+            assert.strictEqual(TimeBalance.computeAllTimeBalanceUntilAsync.notCalled, true);
         });
 
         it('Should not update value because of rejection', () =>
         {
             stub(console, 'log');
-            timeBalanceMock.mock('computeAllTimeBalanceUntilAsync', stub().rejects('Error'));
+            mocks._computeAllTimeBalanceUntilAsyn = stub(TimeBalance, 'computeAllTimeBalanceUntilAsync').rejects('Error');
             const preferences = {view: 'day'};
             const languageData = {hello: 'hola'};
             const calendar = new ExtendedClass(preferences, languageData);
             calendar._updateAllTimeBalance();
-            assert.strictEqual(timeBalanceMock.getMock('computeAllTimeBalanceUntilAsync').calledOnce, true);
+            assert.strictEqual(TimeBalance.computeAllTimeBalanceUntilAsync.calledOnce, true);
 
             // When the rejection happens, we call console.log with the error value
             setTimeout(() =>
@@ -191,29 +191,29 @@ describe('BaseCalendar.js', () =>
         it('Should not update value because no overall-balance element', () =>
         {
             global.$ = () => false;
-            timeBalanceMock.mock('computeAllTimeBalanceUntilAsync', stub().resolves('2022-02-31'));
-            timeMathMock.mock('isNegative', stub().returns(true));
+            mocks._computeAllTimeBalanceUntilAsyn = stub(TimeBalance, 'computeAllTimeBalanceUntilAsync').resolves('2022-02-31');
+            mocks._isNegative = stub(TimeMath, 'isNegative').returns(true);
             const preferences = {view: 'day'};
             const languageData = {hello: 'hola'};
             const calendar = new ExtendedClass(preferences, languageData);
             calendar._updateAllTimeBalance();
-            assert.strictEqual(timeMathMock.getMock('isNegative').notCalled, true);
-            assert.strictEqual(timeBalanceMock.getMock('computeAllTimeBalanceUntilAsync').calledOnce, true);
+            assert.strictEqual(TimeMath.isNegative.notCalled, true);
+            assert.strictEqual(TimeBalance.computeAllTimeBalanceUntilAsync.calledOnce, true);
         });
 
         it('Should update value with text-danger class', (done) =>
         {
             $('body').append('<span id="overall-balance" value="12:12">12:12</span>');
             $('#overall-balance').val('12:12');
-            timeBalanceMock.mock('computeAllTimeBalanceUntilAsync', stub().resolves('2022-02-31'));
-            timeMathMock.mock('isNegative', stub().returns(true));
+            mocks._computeAllTimeBalanceUntilAsyn = stub(TimeBalance, 'computeAllTimeBalanceUntilAsync').resolves('2022-02-31');
+            mocks._isNegative = stub(TimeMath, 'isNegative').returns(true);
             const preferences = {view: 'day'};
             const languageData = {hello: 'hola'};
             const calendar = new ExtendedClass(preferences, languageData);
             calendar._updateAllTimeBalance();
             setTimeout(() =>
             {
-                assert.strictEqual(timeBalanceMock.getMock('computeAllTimeBalanceUntilAsync').calledOnce, true);
+                assert.strictEqual(TimeBalance.computeAllTimeBalanceUntilAsync.calledOnce, true);
                 assert.strictEqual($('#overall-balance').val(), '2022-02-31');
                 assert.strictEqual($('#overall-balance').hasClass('text-danger'), true);
                 assert.strictEqual($('#overall-balance').hasClass('text-success'), false);
@@ -225,15 +225,15 @@ describe('BaseCalendar.js', () =>
         {
             $('body').append('<span class="text-success text-danger" id="overall-balance" value="12:12">12:12</span>');
             $('#overall-balance').val('12:12');
-            timeBalanceMock.mock('computeAllTimeBalanceUntilAsync', stub().resolves('2022-02-31'));
-            timeMathMock.mock('isNegative', stub().returns(false));
+            mocks._computeAllTimeBalanceUntilAsyn = stub(TimeBalance, 'computeAllTimeBalanceUntilAsync').resolves('2022-02-31');
+            mocks._isNegative = stub(TimeMath, 'isNegative').returns(false);
             const preferences = {view: 'day'};
             const languageData = {hello: 'hola'};
             const calendar = new ExtendedClass(preferences, languageData);
             calendar._updateAllTimeBalance();
             setTimeout(() =>
             {
-                assert.strictEqual(timeBalanceMock.getMock('computeAllTimeBalanceUntilAsync').calledOnce, true);
+                assert.strictEqual(TimeBalance.computeAllTimeBalanceUntilAsync.calledOnce, true);
                 assert.strictEqual($('#overall-balance').val(), '2022-02-31');
                 assert.strictEqual($('#overall-balance').hasClass('text-danger'), false);
                 assert.strictEqual($('#overall-balance').hasClass('text-success'), true);
@@ -491,8 +491,6 @@ describe('BaseCalendar.js', () =>
         {
             mock.restore();
         }
-        timeBalanceMock.restoreAll();
-        timeMathMock.restoreAll();
         global.$ = $_backup;
         $('#overall-balance').remove();
         resetPreferences();

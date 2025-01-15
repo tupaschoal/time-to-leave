@@ -6,8 +6,7 @@ import Store from 'electron-store';
 import fs from 'fs';
 
 import { generateKey } from './date-db-formatter.mjs';
-import { validateTime } from './time-math.mjs';
-import { MockClass } from '../__mocks__/Mock.mjs';
+import TimeMath from './time-math.mjs';
 
 /**
  * Returns the database as an array of:
@@ -56,112 +55,107 @@ function _getWaivedEntries()
     return output;
 }
 
-function _exportDatabaseToFile(filename)
-{
-    let information = _getEntries();
-    information = information.concat(_getWaivedEntries());
-    try
-    {
-        fs.writeFileSync(filename, JSON.stringify(information, null,'\t'), 'utf-8');
-    }
-    catch
-    {
-        return false;
-    }
-    return true;
-}
-
 function _validateDate(dateStr)
 {
     const date = new Date(dateStr);
     return date instanceof Date && !Number.isNaN(date.getTime());
 }
 
-function validEntry(entry)
+class ImportExport
 {
-    if (entry.hasOwnProperty('type') && ['waived', 'flexible'].indexOf(entry.type) !== -1)
+    static validEntry(entry)
     {
-        const validatedDate = entry.hasOwnProperty('date') && _validateDate(entry.date);
-        let hasExpectedProperties;
-        let validatedTime = true;
-        if (entry.type === 'flexible')
+        if (entry.hasOwnProperty('type') && ['waived', 'flexible'].indexOf(entry.type) !== -1)
         {
-            hasExpectedProperties = entry.hasOwnProperty('values') && Array.isArray(entry.values) && entry.values.length > 0;
-            if (hasExpectedProperties)
+            const validatedDate = entry.hasOwnProperty('date') && _validateDate(entry.date);
+            let hasExpectedProperties;
+            let validatedTime = true;
+            if (entry.type === 'flexible')
             {
-                for (const value of entry.values)
+                hasExpectedProperties = entry.hasOwnProperty('values') && Array.isArray(entry.values) && entry.values.length > 0;
+                if (hasExpectedProperties)
                 {
-                    validatedTime &= (validateTime(value) || value === '--:--');
+                    for (const value of entry.values)
+                    {
+                        validatedTime &= (TimeMath.validateTime(value) || value === '--:--');
+                    }
                 }
-            }
-        }
-        else
-        {
-            hasExpectedProperties = entry.hasOwnProperty('data');
-            validatedTime = entry.hasOwnProperty('hours') && validateTime(entry.hours);
-        }
-        if (hasExpectedProperties && validatedDate && validatedTime)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-function _importDatabaseFromFile(filename)
-{
-    const calendarStore = new Store({name: 'flexible-store'});
-    const waivedWorkdays = new Store({name: 'waived-workdays'});
-    try
-    {
-        const information = JSON.parse(fs.readFileSync(filename[0], 'utf-8'));
-        let failedEntries = 0;
-        const entries = {};
-        const waiverEntries = {};
-        for (let i = 0; i < information.length; ++i)
-        {
-            const entry = information[i];
-            if (!validEntry(entry))
-            {
-                failedEntries += 1;
-                continue;
-            }
-            if (entry.type === 'waived')
-            {
-                waiverEntries[entry.date] = { 'reason' : entry.data, 'hours' : entry.hours };
             }
             else
             {
-                assert(entry.type === 'flexible');
-                const [year, month, day] = entry.date.split('-');
-                //The main database uses a JS-based month index (0-11)
-                //So we need to adjust it from human month index (1-12)
-                const date = generateKey(year, (parseInt(month) - 1), day);
-                entries[date] = {values: entry.values};
+                hasExpectedProperties = entry.hasOwnProperty('data');
+                validatedTime = entry.hasOwnProperty('hours') && TimeMath.validateTime(entry.hours);
+            }
+            if (hasExpectedProperties && validatedDate && validatedTime)
+            {
+                return true;
             }
         }
-
-        calendarStore.set(entries);
-        waivedWorkdays.set(waiverEntries);
-
-        if (failedEntries !== 0)
-        {
-            return {'result': false, 'total': information.length, 'failed': failedEntries};
-        }
+        return false;
     }
-    catch
+
+    static exportDatabaseToFile(filename)
     {
-        return {'result': false, 'total': 0, 'failed': 0};
+        let information = _getEntries();
+        information = information.concat(_getWaivedEntries());
+        try
+        {
+            fs.writeFileSync(filename, JSON.stringify(information, null,'\t'), 'utf-8');
+        }
+        catch
+        {
+            return false;
+        }
+        return true;
     }
-    return {'result': true};
+
+    static importDatabaseFromFile(filename)
+    {
+        const calendarStore = new Store({name: 'flexible-store'});
+        const waivedWorkdays = new Store({name: 'waived-workdays'});
+        try
+        {
+            const information = JSON.parse(fs.readFileSync(filename[0], 'utf-8'));
+            let failedEntries = 0;
+            const entries = {};
+            const waiverEntries = {};
+            for (let i = 0; i < information.length; ++i)
+            {
+                const entry = information[i];
+                if (!ImportExport.validEntry(entry))
+                {
+                    failedEntries += 1;
+                    continue;
+                }
+                if (entry.type === 'waived')
+                {
+                    waiverEntries[entry.date] = { 'reason' : entry.data, 'hours' : entry.hours };
+                }
+                else
+                {
+                    assert(entry.type === 'flexible');
+                    const [year, month, day] = entry.date.split('-');
+                    //The main database uses a JS-based month index (0-11)
+                    //So we need to adjust it from human month index (1-12)
+                    const date = generateKey(year, (parseInt(month) - 1), day);
+                    entries[date] = {values: entry.values};
+                }
+            }
+
+            calendarStore.set(entries);
+            waivedWorkdays.set(waiverEntries);
+
+            if (failedEntries !== 0)
+            {
+                return {'result': false, 'total': information.length, 'failed': failedEntries};
+            }
+        }
+        catch
+        {
+            return {'result': false, 'total': 0, 'failed': 0};
+        }
+        return {'result': true};
+    }
 }
 
-// Enable mocking for some methods, export the mocked versions
-const mocks = {'exportDatabaseToFile': _exportDatabaseToFile, 'importDatabaseFromFile': _importDatabaseFromFile};
-export const exportDatabaseToFile = (filename) => mocks['exportDatabaseToFile'](filename);
-export const importDatabaseFromFile = (filename) => mocks['importDatabaseFromFile'](filename);
-export const importExportMock = new MockClass(mocks);
-
-export {
-    validEntry,
-};
+export default ImportExport;

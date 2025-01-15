@@ -1,12 +1,6 @@
 'use strict';
 
-import {
-    isNegative,
-    multiplyTime,
-    subtractTime,
-    sumTime,
-    validateTime
-} from '../../js/time-math.mjs';
+import TimeMath from '../../js/time-math.mjs';
 import { getDateStr, getMonthLength } from '../../js/date-aux.mjs';
 import { generateKey } from '../../js/date-db-formatter.mjs';
 import { BaseCalendar } from './BaseCalendar.js';
@@ -410,21 +404,21 @@ class DayCalendar extends BaseCalendar
             if (dayTotal !== undefined)
             {
                 countDays = true;
-                monthTotalWorked = sumTime(monthTotalWorked, dayTotal);
+                monthTotalWorked = TimeMath.sumTime(monthTotalWorked, dayTotal);
             }
             if (countDays)
             {
                 workingDaysToCompute += 1;
             }
         }
-        const monthTotalToWork = multiplyTime(this._getHoursPerDay(), workingDaysToCompute * -1);
-        const balance = sumTime(monthTotalToWork, monthTotalWorked);
+        const monthTotalToWork = TimeMath.multiplyTime(this._getHoursPerDay(), workingDaysToCompute * -1);
+        const balance = TimeMath.sumTime(monthTotalToWork, monthTotalWorked);
         const balanceElement = $('#month-balance');
         if (balanceElement)
         {
             balanceElement.html(balance);
             balanceElement.removeClass('text-success text-danger');
-            balanceElement.addClass(isNegative(balance) ? 'text-danger' : 'text-success');
+            balanceElement.addClass(TimeMath.isNegative(balance) ? 'text-danger' : 'text-success');
         }
     }
 
@@ -447,10 +441,10 @@ class DayCalendar extends BaseCalendar
         const dayTotal = $('.day-total span').html();
         if (dayTotal !== undefined && dayTotal.length > 0)
         {
-            const dayBalance = subtractTime(this._getHoursPerDay(), dayTotal);
+            const dayBalance = TimeMath.subtractTime(this._getHoursPerDay(), dayTotal);
             $('#leave-day-balance').val(dayBalance);
             $('#leave-day-balance').removeClass('text-success text-danger');
-            $('#leave-day-balance').addClass(isNegative(dayBalance) ? 'text-danger' : 'text-success');
+            $('#leave-day-balance').addClass(TimeMath.isNegative(dayBalance) ? 'text-danger' : 'text-success');
             $('#summary-unfinished-day').addClass('hidden');
             $('#summary-finished-day').removeClass('hidden');
         }
@@ -555,11 +549,11 @@ class DayCalendar extends BaseCalendar
             {
                 timeEnd = element.value;
 
-                if (validateTime(timeEnd) && validateTime(timeStart))
+                if (TimeMath.validateTime(timeEnd) && TimeMath.validateTime(timeStart))
                 {
                     if (timeEnd > timeStart)
                     {
-                        $(element).closest('.row-entry-pair').prev().find('div.interval').html(subtractTime(timeStart, timeEnd));
+                        $(element).closest('.row-entry-pair').prev().find('div.interval').html(TimeMath.subtractTime(timeStart, timeEnd));
                     }
                     timeStart = '';
                     timeEnd = '';
