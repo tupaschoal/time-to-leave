@@ -102,7 +102,7 @@ function convertTimeFormat(entry)
     return entry;
 }
 
-function renderPreferencesWindow()
+function renderWindowTheme()
 {
     // Theme-handling should be towards the top. Applies theme early so it's more natural.
     const theme = 'theme';
@@ -117,7 +117,10 @@ function renderPreferencesWindow()
         .val();
     preferences[theme] = selectedThemeOption;
     applyTheme(selectedThemeOption);
+}
 
+function renderPreferencesWindow()
+{
     /* istanbul ignore else */
     if ('view' in preferences)
     {
@@ -262,6 +265,17 @@ function setupListeners()
 $(() =>
 {
     preferences = window.rendererApi.getOriginalUserPreferences();
+    requestAnimationFrame(() =>
+    {
+        renderWindowTheme();
+        requestAnimationFrame(() =>
+        {
+            setTimeout(() =>
+            {
+                window.rendererApi.notifyWindowReadyToShow();
+            }, 100);
+        });
+    });
     renderPreferencesWindow();
     setupListeners();
     setupLanguages();
