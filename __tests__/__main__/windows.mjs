@@ -1,10 +1,11 @@
 'use strict';
 
 import assert from 'assert';
-import { BrowserWindow } from 'electron';
-import { stub } from 'sinon';
+import { BrowserWindow, ipcMain } from 'electron';
+import { spy, stub } from 'sinon';
 
 import { getDateStr } from '../../js/date-aux.mjs';
+import IpcConstants from '../../js/ipc-constants.mjs';
 import Windows from '../../js/windows.mjs';
 
 describe('Windows tests', () =>
@@ -14,9 +15,30 @@ describe('Windows tests', () =>
     before(() =>
     {
         // Avoid window being shown
-        // TODO: might not always be working?
         showSpy = stub(BrowserWindow.prototype, 'show');
-        loadSpy = stub(BrowserWindow.prototype, 'loadURL');
+        loadSpy = spy(BrowserWindow.prototype, 'loadURL');
+
+        // Mocking for tests below
+        ipcMain.handle(IpcConstants.GetWaiverDay, () =>
+        {
+            return new Promise((resolve) =>
+            {
+                resolve(global.waiverDay);
+            });
+        });
+        ipcMain.removeHandler(IpcConstants.GetLanguageData);
+        ipcMain.handle(IpcConstants.GetLanguageData, () => ({
+            'language': 'en',
+            'data': {}
+        }));
+        ipcMain.handle(IpcConstants.GetWaiverStoreContents, () =>
+        {
+            return new Promise(resolve => resolve({}));
+        });
+        ipcMain.handle(IpcConstants.GetCountries, () =>
+        {
+            return new Promise(resolve => resolve([]));
+        });
     });
 
     it('Elements should be null on starting', () =>
@@ -41,10 +63,13 @@ describe('Windows tests', () =>
         assert.strictEqual(Math.abs(size[0] - 600) < 10, true);
         assert.strictEqual(Math.abs(size[1] - 500) < 10, true);
 
-        assert.strictEqual(showSpy.calledOnce, true);
         assert.strictEqual(loadSpy.calledOnce, true);
 
-        done();
+        Windows.getWaiverWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        {
+            assert.strictEqual(showSpy.calledOnce, true);
+            done();
+        });
     });
 
     it('Should show waiver window it has been created', (done) =>
@@ -55,10 +80,15 @@ describe('Windows tests', () =>
         Windows.openWaiverManagerWindow(mainWindow);
         Windows.openWaiverManagerWindow(mainWindow);
         assert.notStrictEqual(Windows.getWaiverWindow(), null);
+
         // It should only load once the URL because it already exists
-        assert.strictEqual(showSpy.calledTwice, true);
         assert.strictEqual(loadSpy.calledOnce, true);
-        done();
+
+        Windows.getWaiverWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        {
+            assert.strictEqual(showSpy.calledTwice, true);
+            done();
+        });
     });
 
     it('Should set global waiverDay when event is sent', (done) =>
@@ -67,19 +97,26 @@ describe('Windows tests', () =>
             show: false
         });
         Windows.openWaiverManagerWindow(mainWindow, true);
-        assert.notStrictEqual(Windows.getWaiverWindow(), null);
-        assert.strictEqual(global.waiverDay, getDateStr(new Date()));
-        done();
+        Windows.getWaiverWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        {
+            assert.notStrictEqual(Windows.getWaiverWindow(), null);
+            assert.strictEqual(global.waiverDay, getDateStr(new Date()));
+            done();
+        });
     });
 
-    it('Should reset waiverWindow on close', () =>
+    it('Should reset waiverWindow on close', (done) =>
     {
         const mainWindow = new BrowserWindow({
             show: false
         });
         Windows.openWaiverManagerWindow(mainWindow, true);
-        Windows.getWaiverWindow().close();
-        assert.strictEqual(Windows.getWaiverWindow(), null);
+        Windows.getWaiverWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        {
+            Windows.getWaiverWindow().close();
+            assert.strictEqual(Windows.getWaiverWindow(), null);
+            done();
+        });
     });
 
     it('Should get dialog coordinates', () =>
@@ -109,5 +146,10 @@ describe('Windows tests', () =>
     {
         showSpy.restore();
         loadSpy.restore();
+
+        ipcMain.removeHandler(IpcConstants.GetWaiverDay);
+        ipcMain.removeHandler(IpcConstants.GetLanguageData);
+        ipcMain.removeHandler(IpcConstants.GetWaiverStoreContents);
+        ipcMain.removeHandler(IpcConstants.GetCountries);
     });
 });
