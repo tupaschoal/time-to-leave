@@ -144,6 +144,11 @@ class Windows
         return global.waiverWindow;
     }
 
+    static getPreferencesWindow()
+    {
+        return global.prefWindow;
+    }
+
     static resetWindowsElements()
     {
         global.waiverWindow = null;

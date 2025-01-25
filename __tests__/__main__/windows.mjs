@@ -46,7 +46,7 @@ describe('Windows tests', () =>
         assert.strictEqual(Windows.getWaiverWindow(), null);
         assert.strictEqual(global.tray, null);
         assert.strictEqual(global.contextMenu, null);
-        assert.strictEqual(global.prefWindow, null);
+        assert.strictEqual(Windows.getPreferencesWindow(), null);
     });
 
     it('Should create waiver window', (done) =>
@@ -72,7 +72,7 @@ describe('Windows tests', () =>
         });
     });
 
-    it('Should show waiver window it has been created', (done) =>
+    it('Should show waiver window when it has been created', (done) =>
     {
         const mainWindow = new BrowserWindow({
             show: false
@@ -99,6 +99,7 @@ describe('Windows tests', () =>
         Windows.openWaiverManagerWindow(mainWindow, true);
         Windows.getWaiverWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
         {
+            assert.strictEqual(showSpy.calledOnce, true);
             assert.notStrictEqual(Windows.getWaiverWindow(), null);
             assert.strictEqual(global.waiverDay, getDateStr(new Date()));
             done();
@@ -113,8 +114,66 @@ describe('Windows tests', () =>
         Windows.openWaiverManagerWindow(mainWindow, true);
         Windows.getWaiverWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
         {
+            assert.strictEqual(showSpy.calledOnce, true);
             Windows.getWaiverWindow().close();
             assert.strictEqual(Windows.getWaiverWindow(), null);
+            done();
+        });
+    });
+
+    it('Should create preferences window', (done) =>
+    {
+        const mainWindow = new BrowserWindow({
+            show: false
+        });
+        Windows.openPreferencesWindow(mainWindow);
+        assert.notStrictEqual(Windows.getPreferencesWindow(), null);
+        assert.strictEqual(Windows.getPreferencesWindow() instanceof BrowserWindow, true);
+
+        // Values can vary about 10px from 600, 500
+        const size = Windows.getPreferencesWindow().getSize();
+        assert.strictEqual(Math.abs(size[0] - 550) < 10, true);
+        assert.strictEqual(Math.abs(size[1] - 620) < 10, true);
+
+        assert.strictEqual(loadSpy.calledOnce, true);
+
+        Windows.getPreferencesWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        {
+            assert.strictEqual(showSpy.calledOnce, true);
+            done();
+        });
+    });
+
+    it('Should show preferences window when it has been created', (done) =>
+    {
+        const mainWindow = new BrowserWindow({
+            show: false
+        });
+        Windows.openPreferencesWindow(mainWindow);
+        Windows.openPreferencesWindow(mainWindow);
+        assert.notStrictEqual(Windows.getPreferencesWindow(), null);
+
+        // It should only load once the URL because it already exists
+        assert.strictEqual(loadSpy.calledOnce, true);
+
+        Windows.getPreferencesWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        {
+            assert.strictEqual(showSpy.calledTwice, true);
+            done();
+        });
+    });
+
+    it('Should reset preferences window on close', (done) =>
+    {
+        const mainWindow = new BrowserWindow({
+            show: false
+        });
+        Windows.openPreferencesWindow(mainWindow, true);
+        Windows.getPreferencesWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        {
+            assert.strictEqual(showSpy.calledOnce, true);
+            Windows.getPreferencesWindow().close();
+            assert.strictEqual(Windows.getPreferencesWindow(), null);
             done();
         });
     });
