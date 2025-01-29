@@ -1,11 +1,17 @@
 'use strict';
 
-import { app, net, shell, dialog, BrowserWindow } from 'electron';
+import { app, net, shell } from 'electron';
 import Store from 'electron-store';
 import isOnline from 'is-online';
 
 import { getDateStr } from './date-aux.mjs';
 import i18NextConfig from '../src/configs/i18next.config.mjs';
+
+// Allow require()
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
+const { showDialogSync, showDialog } = require('./window-aux.cjs');
 
 class UpdateManager
 {
@@ -50,7 +56,7 @@ class UpdateManager
                             title: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
                             message: i18NextConfig.getCurrentTranslation('$UpdateManager.old-version-msg'),
                         };
-                        const response = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), options);
+                        const response = showDialogSync(options);
                         if (response === 1)
                         {
                             //Download latest version
@@ -73,7 +79,7 @@ class UpdateManager
                             title: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
                             message: i18NextConfig.getCurrentTranslation('$UpdateManager.upto-date-msg')
                         };
-                        dialog.showMessageBox(null, options);
+                        showDialog(options);
                     }
                 }
             });
