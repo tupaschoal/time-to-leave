@@ -177,7 +177,7 @@ describe('Test Workday Waiver Window', function()
                 'data': {}
             }));
         };
-        window.rendererApi.showDialogSync = () =>
+        window.rendererApi.showDialog = () =>
         {
             return new Promise((resolve) =>
             {

@@ -214,7 +214,7 @@ function setupListeners()
                 title: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.reset-preferences'),
                 message: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.confirm-reset-preferences'),
             };
-            window.rendererApi.showDialogSync(options).then((result) =>
+            window.rendererApi.showDialog(options).then((result) =>
             {
                 if (result.response === 0 /*Yes*/)
                 {
@@ -224,7 +224,7 @@ function setupListeners()
                         message: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.reset-preferences'),
                         detail: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.reset-success'),
                     };
-                    window.rendererApi.showDialogSync(optionsReset);
+                    window.rendererApi.showDialog(optionsReset);
                 }
             });
         });

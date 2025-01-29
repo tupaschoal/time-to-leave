@@ -92,7 +92,7 @@ describe('window-aux.cjs Testing', function()
     //     });
     // });
 
-    describe('showDialogSync(options)', function()
+    describe('showDialog(options)', function()
     {
         it('Does not crash', async() =>
         {
@@ -102,12 +102,12 @@ describe('window-aux.cjs Testing', function()
             let spy;
             testWindow.webContents.on('dom-ready', () =>
             {
-                spy = sinon.spy(windowAux, 'showDialogSync');
+                spy = sinon.spy(windowAux, 'showDialog');
 
                 const options = {
                     title: 'Time to Leave',
                 };
-                windowAux.showDialogSync(options).then(() =>
+                windowAux.showDialog(options).then(() =>
                 {
                     return;
                 });

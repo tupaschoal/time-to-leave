@@ -176,7 +176,7 @@ async function deleteEntryOnClick(event)
         buttons: [getTranslation('$WorkdayWaiver.yes'), getTranslation('$WorkdayWaiver.no')]
     };
 
-    const result = await window.rendererApi.showDialogSync(options);
+    const result = await window.rendererApi.showDialog(options);
     const buttonId = result.response;
     if (buttonId === 1)
     {

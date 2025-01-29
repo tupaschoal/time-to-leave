@@ -16,7 +16,7 @@ import { createRequire } from 'module';
 import IpcConstants from './js/ipc-constants.mjs';
 const require = createRequire(import.meta.url);
 
-const { showAlert, showDialogSync } = require('./js/window-aux.cjs');
+const { showAlert, showDialog } = require('./js/window-aux.cjs');
 
 if (appConfig.win32)
 {
@@ -48,7 +48,7 @@ ipcMain.on(IpcConstants.ShowAlert, (event, alertMessage) =>
 
 ipcMain.handle(IpcConstants.ShowDialog, (event, dialogOptions) =>
 {
-    return showDialogSync(dialogOptions);
+    return showDialog(dialogOptions);
 });
 
 let launchDate = new Date();

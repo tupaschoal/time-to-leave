@@ -9,7 +9,7 @@ const dialog = (electron || require('@electron/remote')).dialog;
  * @param {Object.<string, any>} options
  * @return {Promise}
  */
-function showDialogSync(options)
+function showDialog(options)
 {
     options['title'] = options['title'] || 'Time to Leave';
     return dialog.showMessageBox(BrowserWindow.getFocusedWindow(), options);
@@ -30,5 +30,5 @@ function showAlert(message)
 
 module.exports = {
     showAlert,
-    showDialogSync,
+    showDialog,
 };
