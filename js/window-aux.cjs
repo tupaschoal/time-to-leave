@@ -19,7 +19,7 @@ function showDialog(options)
  * Opens an electron dialog just like a JS alert().
  * @param {string} message
  */
-function showAlert(message)
+function showDialogSync(message)
 {
     const options = {
         'title': 'Time to Leave',
@@ -29,6 +29,6 @@ function showAlert(message)
 }
 
 module.exports = {
-    showAlert,
+    showDialogSync,
     showDialog,
 };

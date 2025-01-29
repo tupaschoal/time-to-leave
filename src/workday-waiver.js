@@ -112,7 +112,7 @@ async function addWaiver()
 
     if (diff < 0)
     {
-        window.workdayWaiverApi.showAlert(getTranslation('$WorkdayWaiver.end-date-cannot-be-less'));
+        window.workdayWaiverApi.showDialogSync(getTranslation('$WorkdayWaiver.end-date-cannot-be-less'));
         return false;
     }
 
@@ -129,7 +129,7 @@ async function addWaiver()
 
         if (hasWaiver)
         {
-            window.workdayWaiverApi.showAlert(`${alreadyHaveWaiverStr} ${tempDateStr}. ${removeWaiverStr}`);
+            window.workdayWaiverApi.showDialogSync(`${alreadyHaveWaiverStr} ${tempDateStr}. ${removeWaiverStr}`);
             return false;
         }
 
@@ -138,7 +138,7 @@ async function addWaiver()
 
     if (noWorkingDaysOnRange)
     {
-        window.workdayWaiverApi.showAlert(getTranslation('$WorkdayWaiver.no-working-days-on-range'));
+        window.workdayWaiverApi.showDialogSync(getTranslation('$WorkdayWaiver.no-working-days-on-range'));
         return false;
     }
 
@@ -397,7 +397,7 @@ async function addHolidaysAsWaiver()
 
     //clear data from table and return the configurations to default
     await initializeHolidayInfo();
-    window.workdayWaiverApi.showAlert(getTranslation('$WorkdayWaiver.loaded-waivers-holidays'));
+    window.workdayWaiverApi.showDialogSync(getTranslation('$WorkdayWaiver.loaded-waivers-holidays'));
 }
 
 async function initializeHolidayInfo()

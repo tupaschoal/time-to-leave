@@ -12,9 +12,9 @@ function getWaiverDay()
     return ipcRenderer.invoke(IpcConstants.GetWaiverDay);
 }
 
-function showAlert(alertMessage)
+function showDialogSync(alertMessage)
 {
-    ipcRenderer.send(IpcConstants.ShowAlert, alertMessage);
+    ipcRenderer.send(IpcConstants.ShowDialogSync, alertMessage);
 }
 
 function setWaiver(key, contents)
@@ -54,7 +54,7 @@ function getRegions(country, state)
 
 const workdayWaiverApi = {
     getWaiverDay: () => getWaiverDay(),
-    showAlert: (alertMessage) => showAlert(alertMessage),
+    showDialogSync: (alertMessage) => showDialogSync(alertMessage),
     getHolidays: (country, state, city, year) => getHolidays(country, state, city, year),
     getCountries: () => getCountries(),
     getStates: (country) => getStates(country),
