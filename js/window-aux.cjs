@@ -16,15 +16,12 @@ function showDialog(options)
 }
 
 /**
- * Opens an electron dialog just like a JS alert().
- * @param {string} message
+ * Opens an electron dialog based on the options, and blocks execution until closed.
+ * @param {Object.<string, any>} options
  */
-function showDialogSync(message)
+function showDialogSync(options)
 {
-    const options = {
-        'title': 'Time to Leave',
-        'message': message
-    };
+    options['title'] = options['title'] || 'Time to Leave';
     dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), options);
 }
 

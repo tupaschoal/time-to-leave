@@ -41,9 +41,9 @@ ipcMain.handle(IpcConstants.GetWaiverDay, () =>
     return global.waiverDay;
 });
 
-ipcMain.on(IpcConstants.ShowDialogSync, (event, alertMessage) =>
+ipcMain.on(IpcConstants.ShowDialogSync, (event, dialogOptions) =>
 {
-    showDialogSync(alertMessage);
+    showDialogSync(dialogOptions);
 });
 
 ipcMain.handle(IpcConstants.ShowDialog, (event, dialogOptions) =>
