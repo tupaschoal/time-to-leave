@@ -384,6 +384,7 @@ function getHelpMenuTemplate()
                         i18NextConfig.getCurrentTranslation('$Menu.copy'),
                         i18NextConfig.getCurrentTranslation('$Menu.ok')
                     ],
+                    defaultId: 1,
                     cancelId: 1,
                     noLink: true
                 })

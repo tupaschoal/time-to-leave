@@ -78,7 +78,8 @@ class UpdateManager
                             type: 'info',
                             buttons: [i18NextConfig.getCurrentTranslation('$Menu.ok')],
                             message: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
-                            detail: i18NextConfig.getCurrentTranslation('$UpdateManager.upto-date-msg')
+                            detail: i18NextConfig.getCurrentTranslation('$UpdateManager.upto-date-msg'),
+                            defaultId: 1
                         };
                         WindowAux.showDialog(options);
                     }

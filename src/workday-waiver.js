@@ -186,6 +186,7 @@ async function deleteEntryOnClick(event)
         detail: `${deleteWaiverMessageStr} ${day}?`,
         type: 'info',
         buttons: [getTranslation('$WorkdayWaiver.yes'), getTranslation('$WorkdayWaiver.no')],
+        defaultId: 1,
         cancelId: 1
     };
 
