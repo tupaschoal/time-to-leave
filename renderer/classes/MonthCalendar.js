@@ -403,8 +403,8 @@ class MonthCalendar extends BaseCalendar
                 const [year, month, day] = dateKey.split('-');
                 const date = [year, parseInt(month) + 1, day].join('-');
                 const removeEntriesDialogOptions = {
-                    title: `${calendar._getTranslation('$MonthCalendar.remove-entry')}`,
-                    message: `${calendar._getTranslation('$MonthCalendar.entry-removal-confirmation')} ${date}?`,
+                    message: `${calendar._getTranslation('$MonthCalendar.remove-entry')}`,
+                    detail: `${calendar._getTranslation('$MonthCalendar.entry-removal-confirmation')} ${date}?`,
                     type: 'info',
                     buttons: [calendar._getTranslation('$MonthCalendar.yes'), calendar._getTranslation('$MonthCalendar.no')]
                 };

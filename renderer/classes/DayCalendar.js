@@ -312,8 +312,8 @@ class DayCalendar extends BaseCalendar
             {
                 const dateKey = $('.rows-time').attr('id');
                 const removeEntriesDialogOptions = {
-                    title: calendar._getTranslation('$DayCalendar.remove-entry'),
-                    message: calendar._getTranslation('$DayCalendar.entry-removal-confirmation'),
+                    message: calendar._getTranslation('$DayCalendar.remove-entry'),
+                    detail: calendar._getTranslation('$DayCalendar.entry-removal-confirmation'),
                     type: 'info',
                     buttons: [calendar._getTranslation('$DayCalendar.yes'), calendar._getTranslation('$DayCalendar.no')]
                 };

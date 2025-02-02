@@ -53,8 +53,8 @@ class UpdateManager
                                 i18NextConfig.getCurrentTranslation('$UpdateManager.remindBtn')
                             ],
                             defaultId: 1,
-                            title: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
-                            message: i18NextConfig.getCurrentTranslation('$UpdateManager.old-version-msg'),
+                            message: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
+                            detail: i18NextConfig.getCurrentTranslation('$UpdateManager.old-version-msg'),
                         };
                         const response = WindowAux.showDialogSync(options);
                         if (response === 1)
@@ -76,8 +76,8 @@ class UpdateManager
                         const options = {
                             type: 'info',
                             buttons: [i18NextConfig.getCurrentTranslation('$Menu.ok')],
-                            title: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
-                            message: i18NextConfig.getCurrentTranslation('$UpdateManager.upto-date-msg')
+                            message: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
+                            detail: i18NextConfig.getCurrentTranslation('$UpdateManager.upto-date-msg')
                         };
                         WindowAux.showDialog(options);
                     }

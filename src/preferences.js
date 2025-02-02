@@ -211,8 +211,8 @@ function setupListeners()
                 buttons: [i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.yes-please'), i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.no-thanks')],
                 defaultId: 1,
                 cancelId: 1,
-                title: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.reset-preferences'),
-                message: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.confirm-reset-preferences'),
+                message: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.reset-preferences'),
+                detail: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.confirm-reset-preferences'),
             };
             window.rendererApi.showDialog(options).then((result) =>
             {

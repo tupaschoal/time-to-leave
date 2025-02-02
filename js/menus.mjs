@@ -233,8 +233,8 @@ function getEditMenuTemplate(mainWindow)
                             i18NextConfig.getCurrentTranslation('$Menu.no-thanks')
                         ],
                         defaultId: 2,
-                        title: i18NextConfig.getCurrentTranslation('$Menu.import-database'),
-                        message: i18NextConfig.getCurrentTranslation('$Menu.confirm-import-db')
+                        message: i18NextConfig.getCurrentTranslation('$Menu.import-database'),
+                        detail: i18NextConfig.getCurrentTranslation('$Menu.confirm-import-db')
                     };
 
                     const confirmation = WindowAux.showDialogSync(options);
@@ -260,8 +260,8 @@ function getEditMenuTemplate(mainWindow)
                             WindowAux.showDialogSync({
                                 icon: appConfig.iconpath,
                                 type: 'warning',
-                                title: i18NextConfig.getCurrentTranslation('$Menu.failed-entries'),
-                                message: message
+                                message: i18NextConfig.getCurrentTranslation('$Menu.failed-entries'),
+                                detail: message
                             });
                         }
                         else
@@ -269,8 +269,8 @@ function getEditMenuTemplate(mainWindow)
                             WindowAux.showDialogSync({
                                 icon: appConfig.iconpath,
                                 type: 'warning',
-                                title: i18NextConfig.getCurrentTranslation('$Menu.failed-entries'),
-                                message: i18NextConfig.getCurrentTranslation('$Menu.something-went-wrong')
+                                message: i18NextConfig.getCurrentTranslation('$Menu.failed-entries'),
+                                detail: i18NextConfig.getCurrentTranslation('$Menu.something-went-wrong')
                             });
                         }
                     }
@@ -289,8 +289,8 @@ function getEditMenuTemplate(mainWindow)
                         i18NextConfig.getCurrentTranslation('$Menu.no-thanks')
                     ],
                     defaultId: 2,
-                    title: i18NextConfig.getCurrentTranslation('$Menu.clear-database'),
-                    message: i18NextConfig.getCurrentTranslation('$Menu.confirm-clear-all-data')
+                    message: i18NextConfig.getCurrentTranslation('$Menu.clear-database'),
+                    detail: i18NextConfig.getCurrentTranslation('$Menu.confirm-clear-all-data')
                 };
 
                 const response = WindowAux.showDialogSync(options);
