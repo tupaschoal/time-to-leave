@@ -201,7 +201,6 @@ function getEditMenuTemplate(mainWindow)
                     WindowAux.showDialog({
                         message: i18NextConfig.getCurrentTranslation('$Menu.database-export'),
                         type: 'info',
-                        icon: appConfig.iconpath,
                         detail: i18NextConfig.getCurrentTranslation('$Menu.database-was-exported')
                     });
                 }
@@ -249,7 +248,6 @@ function getEditMenuTemplate(mainWindow)
                             WindowAux.showDialog({
                                 message: i18NextConfig.getCurrentTranslation('$Menu.database-imported'),
                                 type: 'info',
-                                icon: appConfig.iconpath,
                                 detail: i18NextConfig.getCurrentTranslation('$Menu.import-successful')
                             });
                         }
@@ -259,7 +257,6 @@ function getEditMenuTemplate(mainWindow)
                                 importResult['total']
                             } ${i18NextConfig.getCurrentTranslation('$Menu.could-not-be-loaded')}`;
                             WindowAux.showDialogSync({
-                                icon: appConfig.iconpath,
                                 type: 'warning',
                                 message: i18NextConfig.getCurrentTranslation('$Menu.failed-entries'),
                                 detail: message
@@ -268,8 +265,7 @@ function getEditMenuTemplate(mainWindow)
                         else
                         {
                             WindowAux.showDialogSync({
-                                icon: appConfig.iconpath,
-                                type: 'warning',
+                                type: 'error',
                                 message: i18NextConfig.getCurrentTranslation('$Menu.failed-entries'),
                                 detail: i18NextConfig.getCurrentTranslation('$Menu.something-went-wrong')
                             });
@@ -310,7 +306,6 @@ function getEditMenuTemplate(mainWindow)
                     WindowAux.showDialog({
                         message: i18NextConfig.getCurrentTranslation('$Menu.clear-database'),
                         type: 'info',
-                        icon: appConfig.iconpath,
                         detail: `\n${i18NextConfig.getCurrentTranslation('$Menu.all-clear')}`
                     });
                 }
@@ -378,7 +373,6 @@ function getHelpMenuTemplate()
                 WindowAux.showDialog({
                     message: 'Time to Leave',
                     type: 'info',
-                    icon: appConfig.iconpath,
                     detail: `\n${detail}`,
                     buttons: [
                         i18NextConfig.getCurrentTranslation('$Menu.copy'),

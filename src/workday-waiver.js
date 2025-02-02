@@ -113,6 +113,7 @@ async function addWaiver()
     if (diff < 0)
     {
         const options = {
+            type: 'warning',
             message: getTranslation('$WorkdayWaiver.add-waiver'),
             detail: getTranslation('$WorkdayWaiver.end-date-cannot-be-less')
         };
@@ -134,6 +135,7 @@ async function addWaiver()
         if (hasWaiver)
         {
             const options = {
+                type: 'warning',
                 message: getTranslation('$WorkdayWaiver.add-waiver'),
                 detail: `${alreadyHaveWaiverStr} ${tempDateStr}. ${removeWaiverStr}`
             };
@@ -147,6 +149,7 @@ async function addWaiver()
     if (noWorkingDaysOnRange)
     {
         const options = {
+            type: 'warning',
             message: getTranslation('$WorkdayWaiver.add-waiver'),
             detail: getTranslation('$WorkdayWaiver.no-working-days-on-range')
         };
@@ -184,7 +187,7 @@ async function deleteEntryOnClick(event)
     const options = {
         message: getTranslation('$WorkdayWaiver.add-waiver'),
         detail: `${deleteWaiverMessageStr} ${day}?`,
-        type: 'info',
+        type: 'question',
         buttons: [getTranslation('$WorkdayWaiver.yes'), getTranslation('$WorkdayWaiver.no')],
         defaultId: 1,
         cancelId: 1
@@ -412,6 +415,7 @@ async function addHolidaysAsWaiver()
     //clear data from table and return the configurations to default
     await initializeHolidayInfo();
     const options = {
+        type: 'info',
         message: getTranslation('$WorkdayWaiver.add-waiver'),
         detail: getTranslation('$WorkdayWaiver.loaded-waivers-holidays')
     };

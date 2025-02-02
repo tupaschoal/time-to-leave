@@ -314,7 +314,7 @@ class DayCalendar extends BaseCalendar
                 const removeEntriesDialogOptions = {
                     message: calendar._getTranslation('$DayCalendar.remove-entry'),
                     detail: calendar._getTranslation('$DayCalendar.entry-removal-confirmation'),
-                    type: 'info',
+                    type: 'question',
                     buttons: [calendar._getTranslation('$DayCalendar.yes'), calendar._getTranslation('$DayCalendar.no')],
                     defaultId: 1,
                     cancelId: 1

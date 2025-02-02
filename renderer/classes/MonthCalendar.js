@@ -405,7 +405,7 @@ class MonthCalendar extends BaseCalendar
                 const removeEntriesDialogOptions = {
                     message: `${calendar._getTranslation('$MonthCalendar.remove-entry')}`,
                     detail: `${calendar._getTranslation('$MonthCalendar.entry-removal-confirmation')} ${date}?`,
-                    type: 'info',
+                    type: 'question',
                     buttons: [calendar._getTranslation('$MonthCalendar.yes'), calendar._getTranslation('$MonthCalendar.no')],
                     defaultId: 1,
                     cancelId: 1
