@@ -540,7 +540,7 @@ describe('menus.js', () =>
 
         it('Should not show dialog for clearing db', () =>
         {
-            const showMessageBoxSyncStub = stub(windowAux, 'showDialogSync').returns(0);
+            const showMessageBoxSyncStub = stub(windowAux, 'showDialogSync').returns(1);
             getEditMenuTemplate()[9].click();
             assert.strictEqual(showMessageBoxSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxStub.notCalled, true);
@@ -558,7 +558,7 @@ describe('menus.js', () =>
                 }
             };
             const clearStoreStub = stub(Store.prototype, 'clear');
-            const showMessageBoxSyncStub = stub(windowAux, 'showDialogSync').returns(1);
+            const showMessageBoxSyncStub = stub(windowAux, 'showDialogSync').returns(0);
             getEditMenuTemplate(mainWindow)[9].click();
             assert.strictEqual(showMessageBoxSyncStub.calledOnce, true);
             assert.strictEqual(showMessageBoxStub.calledOnce, true);

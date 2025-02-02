@@ -281,18 +281,17 @@ function getEditMenuTemplate(mainWindow)
                 const options = {
                     type: 'question',
                     buttons: [
-                        i18NextConfig.getCurrentTranslation('$Menu.cancel'),
                         i18NextConfig.getCurrentTranslation('$Menu.yes-please'),
                         i18NextConfig.getCurrentTranslation('$Menu.no-thanks')
                     ],
-                    defaultId: 2,
-                    cancelId: 2,
+                    defaultId: 1,
+                    cancelId: 1,
                     message: i18NextConfig.getCurrentTranslation('$Menu.clear-database'),
                     detail: i18NextConfig.getCurrentTranslation('$Menu.confirm-clear-all-data')
                 };
 
                 const response = WindowAux.showDialogSync(options);
-                if (response === 1)
+                if (response === 0)
                 {
                     const store = new Store();
                     const waivedWorkdays = new Store({ name: 'waived-workdays' });
