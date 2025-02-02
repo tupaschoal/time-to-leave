@@ -231,7 +231,7 @@ function getEditMenuTemplate(mainWindow)
                             i18NextConfig.getCurrentTranslation('$Menu.yes-please'),
                             i18NextConfig.getCurrentTranslation('$Menu.no-thanks')
                         ],
-                        defaultId: 2,
+                        defaultId: 1,
                         cancelId: 1,
                         message: i18NextConfig.getCurrentTranslation('$Menu.import-database'),
                         detail: i18NextConfig.getCurrentTranslation('$Menu.confirm-import-db')
