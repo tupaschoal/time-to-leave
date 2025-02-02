@@ -11,7 +11,7 @@ import i18NextConfig from '../src/configs/i18next.config.mjs';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
-const { showDialogSync, showDialog } = require('./window-aux.cjs');
+const WindowAux = require('./window-aux.cjs');
 
 class UpdateManager
 {
@@ -56,7 +56,7 @@ class UpdateManager
                             title: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
                             message: i18NextConfig.getCurrentTranslation('$UpdateManager.old-version-msg'),
                         };
-                        const response = showDialogSync(options);
+                        const response = WindowAux.showDialogSync(options);
                         if (response === 1)
                         {
                             //Download latest version
@@ -79,7 +79,7 @@ class UpdateManager
                             title: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
                             message: i18NextConfig.getCurrentTranslation('$UpdateManager.upto-date-msg')
                         };
-                        showDialog(options);
+                        WindowAux.showDialog(options);
                     }
                 }
             });

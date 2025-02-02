@@ -16,7 +16,7 @@ import { createRequire } from 'module';
 import IpcConstants from './js/ipc-constants.mjs';
 const require = createRequire(import.meta.url);
 
-const { showDialogSync, showDialog } = require('./js/window-aux.cjs');
+const WindowAux = require('./js/window-aux.cjs');
 
 if (appConfig.win32)
 {
@@ -43,12 +43,12 @@ ipcMain.handle(IpcConstants.GetWaiverDay, () =>
 
 ipcMain.on(IpcConstants.ShowDialogSync, (event, dialogOptions) =>
 {
-    showDialogSync(dialogOptions);
+    WindowAux.showDialogSync(dialogOptions);
 });
 
 ipcMain.handle(IpcConstants.ShowDialog, (event, dialogOptions) =>
 {
-    return showDialog(dialogOptions);
+    return WindowAux.showDialog(dialogOptions);
 });
 
 let launchDate = new Date();
