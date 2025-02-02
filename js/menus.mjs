@@ -233,6 +233,7 @@ function getEditMenuTemplate(mainWindow)
                             i18NextConfig.getCurrentTranslation('$Menu.no-thanks')
                         ],
                         defaultId: 2,
+                        cancelId: 1,
                         message: i18NextConfig.getCurrentTranslation('$Menu.import-database'),
                         detail: i18NextConfig.getCurrentTranslation('$Menu.confirm-import-db')
                     };
@@ -289,6 +290,7 @@ function getEditMenuTemplate(mainWindow)
                         i18NextConfig.getCurrentTranslation('$Menu.no-thanks')
                     ],
                     defaultId: 2,
+                    cancelId: 2,
                     message: i18NextConfig.getCurrentTranslation('$Menu.clear-database'),
                     detail: i18NextConfig.getCurrentTranslation('$Menu.confirm-clear-all-data')
                 };
@@ -382,6 +384,7 @@ function getHelpMenuTemplate()
                         i18NextConfig.getCurrentTranslation('$Menu.copy'),
                         i18NextConfig.getCurrentTranslation('$Menu.ok')
                     ],
+                    cancelId: 1,
                     noLink: true
                 })
                     .then(result =>

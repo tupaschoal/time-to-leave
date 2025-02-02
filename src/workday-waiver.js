@@ -185,7 +185,8 @@ async function deleteEntryOnClick(event)
         message: getTranslation('$WorkdayWaiver.add-waiver'),
         detail: `${deleteWaiverMessageStr} ${day}?`,
         type: 'info',
-        buttons: [getTranslation('$WorkdayWaiver.yes'), getTranslation('$WorkdayWaiver.no')]
+        buttons: [getTranslation('$WorkdayWaiver.yes'), getTranslation('$WorkdayWaiver.no')],
+        cancelId: 1
     };
 
     const result = await window.rendererApi.showDialog(options);

@@ -406,7 +406,8 @@ class MonthCalendar extends BaseCalendar
                     message: `${calendar._getTranslation('$MonthCalendar.remove-entry')}`,
                     detail: `${calendar._getTranslation('$MonthCalendar.entry-removal-confirmation')} ${date}?`,
                     type: 'info',
-                    buttons: [calendar._getTranslation('$MonthCalendar.yes'), calendar._getTranslation('$MonthCalendar.no')]
+                    buttons: [calendar._getTranslation('$MonthCalendar.yes'), calendar._getTranslation('$MonthCalendar.no')],
+                    cancelId: 1
                 };
                 const getInputs = $(element).find('input');
                 const len = getInputs.length;

@@ -315,7 +315,8 @@ class DayCalendar extends BaseCalendar
                     message: calendar._getTranslation('$DayCalendar.remove-entry'),
                     detail: calendar._getTranslation('$DayCalendar.entry-removal-confirmation'),
                     type: 'info',
-                    buttons: [calendar._getTranslation('$DayCalendar.yes'), calendar._getTranslation('$DayCalendar.no')]
+                    buttons: [calendar._getTranslation('$DayCalendar.yes'), calendar._getTranslation('$DayCalendar.no')],
+                    cancelId: 1
                 };
                 const getInputs = $('.row-entry-pair').find('input');
                 const len = getInputs.length;

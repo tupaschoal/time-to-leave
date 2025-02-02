@@ -53,6 +53,7 @@ class UpdateManager
                                 i18NextConfig.getCurrentTranslation('$UpdateManager.remindBtn')
                             ],
                             defaultId: 1,
+                            cancelId: 0,
                             message: i18NextConfig.getCurrentTranslation('$UpdateManager.title'),
                             detail: i18NextConfig.getCurrentTranslation('$UpdateManager.old-version-msg'),
                         };
