@@ -199,7 +199,6 @@ function getEditMenuTemplate(mainWindow)
                 {
                     ImportExport.exportDatabaseToFile(response);
                     WindowAux.showDialog({
-                        title: 'Time to Leave',
                         message: i18NextConfig.getCurrentTranslation('$Menu.database-export'),
                         type: 'info',
                         icon: appConfig.iconpath,
@@ -247,7 +246,6 @@ function getEditMenuTemplate(mainWindow)
                         if (importResult['result'])
                         {
                             WindowAux.showDialog({
-                                title: 'Time to Leave',
                                 message: i18NextConfig.getCurrentTranslation('$Menu.database-imported'),
                                 type: 'info',
                                 icon: appConfig.iconpath,
@@ -308,7 +306,6 @@ function getEditMenuTemplate(mainWindow)
                     // Reload only the calendar itself to avoid a flash
                     mainWindow.webContents.send(IpcConstants.ReloadCalendar);
                     WindowAux.showDialog({
-                        title: 'Time to Leave',
                         message: i18NextConfig.getCurrentTranslation('$Menu.clear-database'),
                         type: 'info',
                         icon: appConfig.iconpath,
@@ -377,7 +374,6 @@ function getHelpMenuTemplate()
             {
                 const detail = getDetails();
                 WindowAux.showDialog({
-                    title: 'Time to Leave',
                     message: 'Time to Leave',
                     type: 'info',
                     icon: appConfig.iconpath,

@@ -179,7 +179,6 @@ async function deleteEntryOnClick(event)
     const deleteWaiverMessageStr = getTranslation('$WorkdayWaiver.delete-waiver-message');
 
     const options = {
-        title: 'Time to Leave',
         message: `${deleteWaiverMessageStr} ${day}?`,
         type: 'info',
         buttons: [getTranslation('$WorkdayWaiver.yes'), getTranslation('$WorkdayWaiver.no')]
