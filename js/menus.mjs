@@ -15,6 +15,12 @@ import Windows from './windows.mjs';
 import i18NextConfig from '../src/configs/i18next.config.mjs';
 import IpcConstants from './ipc-constants.mjs';
 
+// Allow require()
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
+const WindowAux = require('./window-aux.cjs');
+
 function getMainMenuTemplate(mainWindow)
 {
     return [
@@ -192,7 +198,7 @@ function getEditMenuTemplate(mainWindow)
                 if (response)
                 {
                     ImportExport.exportDatabaseToFile(response);
-                    dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+                    WindowAux.showDialog({
                         title: 'Time to Leave',
                         message: i18NextConfig.getCurrentTranslation('$Menu.database-export'),
                         type: 'info',
@@ -232,10 +238,7 @@ function getEditMenuTemplate(mainWindow)
                         message: i18NextConfig.getCurrentTranslation('$Menu.confirm-import-db')
                     };
 
-                    const confirmation = dialog.showMessageBoxSync(
-                        BrowserWindow.getFocusedWindow(),
-                        options
-                    );
+                    const confirmation = WindowAux.showDialogSync(options);
                     if (confirmation === /*Yes*/ 0)
                     {
                         const importResult = ImportExport.importDatabaseFromFile(response);
@@ -243,7 +246,7 @@ function getEditMenuTemplate(mainWindow)
                         mainWindow.webContents.send(IpcConstants.ReloadCalendar);
                         if (importResult['result'])
                         {
-                            dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+                            WindowAux.showDialog({
                                 title: 'Time to Leave',
                                 message: i18NextConfig.getCurrentTranslation('$Menu.database-imported'),
                                 type: 'info',
@@ -256,7 +259,7 @@ function getEditMenuTemplate(mainWindow)
                             const message = `${importResult['failed']}/${
                                 importResult['total']
                             } ${i18NextConfig.getCurrentTranslation('$Menu.could-not-be-loaded')}`;
-                            dialog.showMessageBoxSync({
+                            WindowAux.showDialogSync({
                                 icon: appConfig.iconpath,
                                 type: 'warning',
                                 title: i18NextConfig.getCurrentTranslation('$Menu.failed-entries'),
@@ -265,7 +268,7 @@ function getEditMenuTemplate(mainWindow)
                         }
                         else
                         {
-                            dialog.showMessageBoxSync({
+                            WindowAux.showDialogSync({
                                 icon: appConfig.iconpath,
                                 type: 'warning',
                                 title: i18NextConfig.getCurrentTranslation('$Menu.failed-entries'),
@@ -292,10 +295,7 @@ function getEditMenuTemplate(mainWindow)
                     message: i18NextConfig.getCurrentTranslation('$Menu.confirm-clear-all-data')
                 };
 
-                const response = dialog.showMessageBoxSync(
-                    BrowserWindow.getFocusedWindow(),
-                    options
-                );
+                const response = WindowAux.showDialogSync(options);
                 if (response === 1)
                 {
                     const store = new Store();
@@ -307,7 +307,7 @@ function getEditMenuTemplate(mainWindow)
                     calendarStore.clear();
                     // Reload only the calendar itself to avoid a flash
                     mainWindow.webContents.send(IpcConstants.ReloadCalendar);
-                    dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+                    WindowAux.showDialog({
                         title: 'Time to Leave',
                         message: i18NextConfig.getCurrentTranslation('$Menu.clear-database'),
                         type: 'info',
@@ -376,19 +376,18 @@ function getHelpMenuTemplate()
             click()
             {
                 const detail = getDetails();
-                dialog
-                    .showMessageBox(BrowserWindow.getFocusedWindow(), {
-                        title: 'Time to Leave',
-                        message: 'Time to Leave',
-                        type: 'info',
-                        icon: appConfig.iconpath,
-                        detail: `\n${detail}`,
-                        buttons: [
-                            i18NextConfig.getCurrentTranslation('$Menu.copy'),
-                            i18NextConfig.getCurrentTranslation('$Menu.ok')
-                        ],
-                        noLink: true
-                    })
+                WindowAux.showDialog({
+                    title: 'Time to Leave',
+                    message: 'Time to Leave',
+                    type: 'info',
+                    icon: appConfig.iconpath,
+                    detail: `\n${detail}`,
+                    buttons: [
+                        i18NextConfig.getCurrentTranslation('$Menu.copy'),
+                        i18NextConfig.getCurrentTranslation('$Menu.ok')
+                    ],
+                    noLink: true
+                })
                     .then(result =>
                     {
                         const buttonId = result.response;
