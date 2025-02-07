@@ -29,7 +29,13 @@ describe('Windows tests', () =>
         ipcMain.removeHandler(IpcConstants.GetLanguageData);
         ipcMain.handle(IpcConstants.GetLanguageData, () => ({
             'language': 'en',
-            'data': {}
+            'data': {
+                'translation': {
+                    '$Preferences': {
+                        'hideNonWorkingDay': ''
+                    }
+                }
+            }
         }));
         ipcMain.handle(IpcConstants.GetWaiverStoreContents, () =>
         {
@@ -77,18 +83,27 @@ describe('Windows tests', () =>
         const mainWindow = new BrowserWindow({
             show: false
         });
-        Windows.openWaiverManagerWindow(mainWindow);
-        Windows.openWaiverManagerWindow(mainWindow);
-        assert.notStrictEqual(Windows.getWaiverWindow(), null);
-
-        // It should only load once the URL because it already exists
-        assert.strictEqual(loadSpy.calledOnce, true);
-
-        Windows.getWaiverWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        let firstShow = true;
+        showSpy.callsFake(() =>
         {
-            assert.strictEqual(showSpy.calledTwice, true);
-            done();
+            if (firstShow)
+            {
+                firstShow = false;
+                Windows.openWaiverManagerWindow(mainWindow);
+            }
+            else
+            {
+                assert.notStrictEqual(Windows.getWaiverWindow(), null);
+
+                // It should only load once the URL because it already exists
+                assert.strictEqual(loadSpy.calledOnce, true);
+                assert.strictEqual(showSpy.calledTwice, true);
+                showSpy.restore();
+                showSpy = stub(BrowserWindow.prototype, 'show');
+                done();
+            }
         });
+        Windows.openWaiverManagerWindow(mainWindow);
     });
 
     it('Should set global waiverDay when event is sent', (done) =>
@@ -121,27 +136,34 @@ describe('Windows tests', () =>
         });
     });
 
-    it('Should create preferences window', (done) =>
+    it('Should create preferences window', function(done)
     {
+        // For some reason this test takes longer in the CI for windows-latest.
+        // The last requestAnimationFrame() call inside preferences.js has been taking ~2s.
+        this.timeout(5000);
+
         const mainWindow = new BrowserWindow({
             show: false
         });
-        Windows.openPreferencesWindow(mainWindow);
-        assert.notStrictEqual(Windows.getPreferencesWindow(), null);
-        assert.strictEqual(Windows.getPreferencesWindow() instanceof BrowserWindow, true);
 
-        // Values can vary about 10px from 600, 500
-        const size = Windows.getPreferencesWindow().getSize();
-        assert.strictEqual(Math.abs(size[0] - 550) < 10, true);
-        assert.strictEqual(Math.abs(size[1] - 620) < 10, true);
-
-        assert.strictEqual(loadSpy.calledOnce, true);
-
-        Windows.getPreferencesWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        showSpy.callsFake(() =>
         {
-            assert.strictEqual(showSpy.calledOnce, true);
+            assert.notStrictEqual(Windows.getPreferencesWindow(), null);
+            assert.strictEqual(Windows.getPreferencesWindow() instanceof BrowserWindow, true);
+
+            // Values can vary about 10px from 600, 500
+            const size = Windows.getPreferencesWindow().getSize();
+            assert.strictEqual(Math.abs(size[0] - 550) < 10, true);
+            assert.strictEqual(Math.abs(size[1] - 620) < 10, true);
+
+            assert.strictEqual(loadSpy.calledOnce, true);
+
+            showSpy.restore();
+            showSpy = stub(BrowserWindow.prototype, 'show');
             done();
         });
+
+        Windows.openPreferencesWindow(mainWindow);
     });
 
     it('Should show preferences window when it has been created', (done) =>
@@ -149,18 +171,27 @@ describe('Windows tests', () =>
         const mainWindow = new BrowserWindow({
             show: false
         });
-        Windows.openPreferencesWindow(mainWindow);
-        Windows.openPreferencesWindow(mainWindow);
-        assert.notStrictEqual(Windows.getPreferencesWindow(), null);
-
-        // It should only load once the URL because it already exists
-        assert.strictEqual(loadSpy.calledOnce, true);
-
-        Windows.getPreferencesWindow().webContents.ipc.on(IpcConstants.WindowReadyToShow, () =>
+        let firstShow = true;
+        showSpy.callsFake(() =>
         {
-            assert.strictEqual(showSpy.calledTwice, true);
-            done();
+            if (firstShow)
+            {
+                firstShow = false;
+                Windows.openPreferencesWindow(mainWindow);
+            }
+            else
+            {
+                assert.notStrictEqual(Windows.getPreferencesWindow(), null);
+
+                // It should only load once the URL because it already exists
+                assert.strictEqual(loadSpy.calledOnce, true);
+                assert.strictEqual(showSpy.calledTwice, true);
+                showSpy.restore();
+                showSpy = stub(BrowserWindow.prototype, 'show');
+                done();
+            }
         });
+        Windows.openPreferencesWindow(mainWindow);
     });
 
     it('Should reset preferences window on close', (done) =>
