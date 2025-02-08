@@ -15,7 +15,7 @@ get_changed_files()
 
 readarray -t changed_css < <(get_changed_files 'css/*.css')
 if [ ! -z "$changed_css" ]; then
-    stylelint -- "${changed_css[@]}" &
+    stylelint -- "${changed_css[@]}" --config configs/.stylelintrc.json --ignore-path configs/.stylelintignore &
     pids="$pids $!"
 fi
 
