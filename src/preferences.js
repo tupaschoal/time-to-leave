@@ -208,7 +208,7 @@ function setupListeners()
         {
             const options = {
                 type: 'question',
-                buttons: [i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.yes-please'), i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.no-thanks')],
+                buttons: [i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.yes'), i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.no')],
                 defaultId: 1,
                 cancelId: 1,
                 message: i18nTranslator.getTranslationInLanguageData(languageData.data, '$Preferences.reset-preferences'),

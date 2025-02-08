@@ -228,8 +228,8 @@ function getEditMenuTemplate(mainWindow)
                     const options = {
                         type: 'question',
                         buttons: [
-                            i18NextConfig.getCurrentTranslation('$Menu.yes-please'),
-                            i18NextConfig.getCurrentTranslation('$Menu.no-thanks')
+                            i18NextConfig.getCurrentTranslation('$Menu.yes'),
+                            i18NextConfig.getCurrentTranslation('$Menu.no')
                         ],
                         defaultId: 1,
                         cancelId: 1,
@@ -281,8 +281,8 @@ function getEditMenuTemplate(mainWindow)
                 const options = {
                     type: 'question',
                     buttons: [
-                        i18NextConfig.getCurrentTranslation('$Menu.yes-please'),
-                        i18NextConfig.getCurrentTranslation('$Menu.no-thanks')
+                        i18NextConfig.getCurrentTranslation('$Menu.yes'),
+                        i18NextConfig.getCurrentTranslation('$Menu.no')
                     ],
                     defaultId: 1,
                     cancelId: 1,
