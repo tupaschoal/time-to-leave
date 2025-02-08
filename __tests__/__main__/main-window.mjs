@@ -436,7 +436,7 @@ describe('main-window.mjs', () =>
                     preventDefault: () => {}
                 });
                 assert.strictEqual(intervalSpy.calledOnceWithExactly(match.func, 60 * 1000), true);
-                clock.next();
+                clock.nextAsync();
                 intervalSpy.restore();
             });
         });
