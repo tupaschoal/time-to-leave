@@ -17,7 +17,7 @@
     "debug:render": "electronmon --remote-debugging-port=9222 .",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint css/*.css --config configs/.stylelintrc.json --ignore-path configs/.stylelintignore",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "eslint . --config configs/eslint.config.mjs",
     "lint:markdown": "prettier -c docs/*.md *.md --config configs/.prettierrc.json --ignore-path .gitignore --ignore-path configs/.prettierignore",
     "lint:json": "prettier -c locales/*/*.json --config configs/.prettierrc.json --ignore-path .gitignore --ignore-path configs/.prettierignore",
     "lint-fix": "npm-run-all --parallel lint-fix:*",

@@ -21,7 +21,7 @@ fi
 
 readarray -t changed_js < <(get_changed_files '*/*.cjs' '*/*.js' '*/*.mjs')
 if [ ! -z "$changed_js" ]; then
-    eslint "${changed_js[@]}" &
+    eslint "${changed_js[@]}" --config configs/eslint.config.mjs &
     pids="$pids $!"
 fi
 
