@@ -27,7 +27,7 @@ fi
 
 readarray -t changed_docs < <(get_changed_files 'locales/*/*.json' 'docs/*.md' '*.md')
 if [ ! -z "$changed_docs" ]; then
-    prettier -c "${changed_docs[@]}" &
+    prettier -c "${changed_docs[@]}" --config configs/.prettierrc.json --ignore-path .gitignore --ignore-path configs/.prettierignore &
     pids="$pids $!"
 fi
 
