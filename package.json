@@ -33,8 +33,8 @@
     "pretest": "npm run clean",
     "start": "electronmon .",
     "test": "npm-run-all test:*",
-    "test:mocha": "c8 -o ./coverage_mocha -- mocha",
-    "test:electron-mocha": "c8 electron-mocha",
+    "test:mocha": "c8 -o ./coverage_mocha -- mocha --config configs/.mocharc.cjs",
+    "test:electron-mocha": "c8 electron-mocha --config configs/.mocharc.cjs",
     "setup:win": "node scripts/create_windows_installer.cjs"
   },
   "license": "GPL-3.0",
