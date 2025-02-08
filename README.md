@@ -15,7 +15,7 @@
 <a href="docs/translated_readmes/README-gu.md"><img src="https://img.shields.io/badge/gu-gujarati-purple" alt="આ દસ્તાવેજ ગુજરાતીમાં પણ ઉપલબ્ધ છે"></a>
 <a href="docs/translated_readmes/README-he.md"><img src="https://img.shields.io/badge/he-עברית-purple" alt="מסמך זה כתוב גם בעברית"></a>
 <a href="docs/translated_readmes/README-hi.md"><img src="https://img.shields.io/badge/hi-Hindi-purple" alt="यह दस्तावेज़ Hindi में भी उपलब्ध है"></a>
-<a href="docs/translated_readmes/README-id-ID.md"><img src="https://img.shields.io/badge/id--ID-Bahasa%20Indonesia-purple" alt="Dokumentasi ini tersedia dalam Bahasa Indonesia"></a>
+<a href="docs/translated_readmes/README-id-ID.md"><img src="https://img.shields.io/badge/id--ID-Bahasa%20(Indonesia)-purple" alt="Dokumentasi ini tersedia dalam Bahasa Indonesia"></a>
 <a href="docs/translated_readmes/README-it.md"><img src="https://img.shields.io/badge/it-Italiano-purple" alt="Questo documento è disponibile anche in Italiano"></a>
 <a href="docs/translated_readmes/README-ja.md"><img src="https://img.shields.io/badge/ja-日本語-purple" alt="このドキュメントは日本語でもご覧になれます。"></a>
 <a href="docs/translated_readmes/README-ko.md"><img src="https://img.shields.io/badge/ko-한국어-purple" alt="이 문서는 한국어 로도 제공됩니다"></a>
