@@ -68,12 +68,16 @@ Time to Leave works on MacOS, Windows and Linux, and you can download the desire
 
 ## How to build and contribute to TTL
 
-If you want to help, read our [contributing](CONTRIBUTING.md) guidelines.
-You can also refer to our [development guide](DEVELOPMENT.md) for more information.
+If you want to help, read our [contributing](docs/CONTRIBUTING.md) guidelines.
+You can also refer to our [development guide](docs/DEVELOPMENT.md) for more information.
 
 ## Get in touch!
 
 Join our [Discord server](https://discord.gg/P3KkEF5) to discuss upcoming features and more.
+
+## Privacy Policy
+
+Refer to our [Privacy Policy](docs/PRIVACYPOLICY.md)
 
 ## Credits
 

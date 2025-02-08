@@ -40,8 +40,8 @@ Time to Leave funziona su MacOS, Windows e Linux, e puoi scaricare la versione d
 
 ## Come compilare e contribuire a TTL
 
-Se vuoi aiutare, leggi le nostre [linee guida](CONTRIBUTING.md).
-Puoi anche fare riferimento alla [guida di sviluppo](DEVELOPMENT.md) per maggiori informazioni.
+Se vuoi aiutare, leggi le nostre [linee guida](../CONTRIBUTING.md).
+Puoi anche fare riferimento alla [guida di sviluppo](../DEVELOPMENT.md) per maggiori informazioni.
 
 ## Mettiti in contatto!
 

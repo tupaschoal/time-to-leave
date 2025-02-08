@@ -40,8 +40,8 @@ Time to Leave は MacOS、Windows、Linux で動作し、[最新リリース](ht
 
 ## TTL の構築と貢献の仕方
 
-お手伝いをしてくださる方は、私達の[コントリビューション](CONTRIBUTING.md)ガイドラインをご一読ください。
-詳細は[開発ガイド](DEVELOPMENT.md)もご参照ください。
+お手伝いをしてくださる方は、私達の[コントリビューション](../CONTRIBUTING.md)ガイドラインをご一読ください。
+詳細は[開発ガイド](../DEVELOPMENT.md)もご参照ください。
 
 ## ご連絡はこちら
 

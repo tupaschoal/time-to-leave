@@ -39,8 +39,8 @@ Time to Leave fungerar på MacOS, Windows och Linux, och du kan ladda ned den ve
 
 ## Hur man bygger och bidrar till TTL
 
-Om du vill hjälpa till, läs vår [att bidra](CONTRIBUTING.md) guidelines.
-Du kan också läsa vår [utvecklarguide](DEVELOPMENT.md) för mer information.
+Om du vill hjälpa till, läs vår [att bidra](../CONTRIBUTING.md) guidelines.
+Du kan också läsa vår [utvecklarguide](../DEVELOPMENT.md) för mer information.
 
 ## Ta kontakt!
 
