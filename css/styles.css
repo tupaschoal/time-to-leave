@@ -7,8 +7,11 @@
   font-weight: 1 999;
 }
 
-/* This is an implicit, and an explicit declaration of the Default color scheme */
+* {
+  --interval-width: 5.4ch;
+}
 
+/* This is an implicit, and an explicit declaration of the Default color scheme */
 html,
 html[data-theme="light"] {
   --page-bground: white;
@@ -563,6 +566,23 @@ input:disabled + .slider {
   background-color: var(--disabled-input-bground);
 }
 
+/* Hide spinners to clean up number inputs */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
+/* Make the number input not have the buttons on the right */
+input[type="number"] {
+    appearance: textfield;
+    border: 1px solid #ccc;
+    padding: 1px 4.8px 1px 0px;
+    border-radius: 4px;
+    text-align: right;
+    width: var(--interval-width);
+}
+
 /** Common window styles **/
 
 .common-window {
@@ -698,6 +718,9 @@ input:disabled + .slider {
 
 #preferences-window #hours-per-day, #break-time-interval {
   text-align: right;
+
+  /* redefine the width in terms of characters for simpler match to notification interval */
+  width: var(--interval-width);
 }
 
 #preferences-window i {
