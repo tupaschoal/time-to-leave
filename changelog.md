@@ -12,7 +12,7 @@
 - Enhancement [#1139]: Improved consistency of all pop-ups in the application
 - Enhancement [#1142]: Make balance row always visible above the punch button
 - Enhancement [#1155]: Round squared buttons and fields to match app look
-- Enhancement [https://github.com/TTLApp/time-to-leave/pull/1165]: Restyle number inputs in preferences window
+- Enhancement [#1165]: Restyle number inputs in preferences window
 - Fix [#1008]: Sourced conflicting holidays being imported by default
 - Fix [#1028]: Make images and icons not draggable
 - Fix [#1034]: Preserving TTL font when offline
