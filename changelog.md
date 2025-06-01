@@ -14,6 +14,7 @@
 - Enhancement [#1146]: Add a progress indication to main window when another window is being opened
 - Enhancement [#1155]: Round squared buttons and fields to match app look
 - Enhancement [#1165]: Restyle number inputs in preferences window
+- Enhancement [#1176]: UI responsiveness and alignments on various window sizes.
 - Fix [#1008]: Sourced conflicting holidays being imported by default
 - Fix [#1028]: Make images and icons not draggable
 - Fix [#1034]: Preserving TTL font when offline
