@@ -2,6 +2,7 @@
 
 <!--- Begin changes - Do not remove -->
 
+- Change [#1428]: Move to 64-bit installers on Windows.
 - Fix [#1162]: Notifications failing with "event.sender.send is not a function"
 - Fix [#1240]: Overall balance updates when changing months/days
 - Fix [#1426]: Harden input handling during installation on Windows.
@@ -15,6 +16,7 @@ Who built 4.0.1:
 - Atomic-Germ
 - anupamme
 - rbalogic
+- tupaschoal
 
 <!--- End users - Do not remove -->
 
