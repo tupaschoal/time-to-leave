@@ -178,15 +178,41 @@ function setupListeners()
         changeValue(this.name, this.checked);
     });
 
+    $('#break-time-interval').on('input', function()
+    {
+        this.reportValidity();
+    });
+
+    $('#break-time-interval').on('blur', function()
+    {
+        this.value = this.checkValidity() ? this.value : '00:30';
+    });
+
+    $('#hours-per-day').on('input', function()
+    {
+        this.setCustomValidity('');
+        this.reportValidity();
+    });
+
+    $('#hours-per-day').on('blur', function()
+    {
+        this.value = this.checkValidity() ? this.value : '08:00';
+        this.setCustomValidity('');
+    });
+
     $('#hours-per-day, #break-time-interval').on('change', function()
     {
-        /* istanbul ignore else */
         if (this.checkValidity() === true)
         {
             const entry = convertTimeFormat(this.value);
             this.value = entry;
             changeValue(this.name, entry);
         }
+    });
+
+    $('#notifications-interval').on('blur change', function()
+    {
+        this.value = this.checkValidity() ? this.value : 5;
     });
 
     $('input[type="number"], input[type="date"]').on('change', function()
