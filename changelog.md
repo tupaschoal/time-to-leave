@@ -4,6 +4,7 @@
 
 - Change [#1428]: Move to 64-bit installers on Windows.
 - Fix [#1162]: Notifications failing with "event.sender.send is not a function"
+- Fix [#1215]: Time-based inputs on preference window not validating and resetting properly
 - Fix [#1240]: Overall balance updates when changing months/days
 - Fix [#1426]: Harden input handling during installation on Windows.
 
